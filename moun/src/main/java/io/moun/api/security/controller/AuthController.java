@@ -41,11 +41,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-        JwtToken token = authService.loginAuth(loginRequest);
-        if (token != null) {
-            return ResponseEntity.ok(new LoginResponse(token.getValue()));
+        JwtToken jwtToken = authService.loginAuth(loginRequest);
+        if (jwtToken != null) {
+            return ResponseEntity.ok(new LoginResponse(jwtToken));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Invalid username or password"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         }
 
