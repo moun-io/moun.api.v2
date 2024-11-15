@@ -1,6 +1,7 @@
 package io.moun.api.security.infrastructure;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -71,8 +72,8 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         try{
             JWT_PARSER.parseSignedClaims(jwtToken.getValue());
             return true;
-        } catch(Exception e){System.out.println(e.getMessage());
-            return false;
+        } catch(Exception e){
+            throw new ExpiredJwtException(null,null,"Your Token is invalid");
         }
     }
     public boolean isValidToken(JwtToken jwtTokenArg) {

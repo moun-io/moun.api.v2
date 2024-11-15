@@ -13,5 +13,6 @@ public interface AuthService {
     public JwtToken login(LoginRequest loginRequest);
 
     public void check(CheckRequest checkRequest);
+
     public Auth findAuthByUsername(String username);
 }

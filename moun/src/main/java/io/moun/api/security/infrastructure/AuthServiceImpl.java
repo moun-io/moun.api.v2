@@ -12,6 +12,7 @@ import io.moun.api.security.domain.vo.JwtToken;
 import io.moun.api.security.exception.UsernameAlreadyExistsException;
 import io.moun.api.security.service.AuthService;
 import io.moun.api.security.service.IJwtTokenHelper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,21 +24,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final IJwtTokenHelper jwtTokenHelper;
-
-    @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager, IJwtTokenHelper jwtTokenHelper) {
-        this.authRepository = authRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenHelper = jwtTokenHelper;
-    }
 
 
     @Override
@@ -61,9 +54,9 @@ public class AuthServiceImpl implements AuthService {
                             loginRequest.getUsername(),
                             loginRequest.getPassword()
                     ));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                jwtTokenHelper.generateToken(authentication);
-                return jwtTokenHelper.getJwtToken();
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            jwtTokenHelper.generateToken(authentication);
+            return jwtTokenHelper.getJwtToken();
         } catch (AuthenticationException e) {
             throw new AuthenticationCredentialsNotFoundException(loginRequest.getUsername());
         }
@@ -78,6 +71,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
     }
+
     @Override
     public Auth findAuthByUsername(String username) {
         Auth auth = authRepository.findByUsername(username).orElse(null);

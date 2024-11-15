@@ -1,5 +1,6 @@
 package io.moun.api.security.infrastructure;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.moun.api.security.domain.vo.JwtToken;
 import io.moun.api.security.service.IJwtTokenHelper;
 import jakarta.servlet.FilterChain;
@@ -44,11 +45,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             } catch (UsernameNotFoundException e) {
                 handleException(response,e,500,"Username Not Found Check the Database");
+            }catch (ExpiredJwtException e){
+                handleException(response,e,401,"Expired JWT Token");
             } catch (Exception e){
                 handleException(response,e,500,"An error occurred while logging in");
             }
-
         }
+        filterChain.doFilter(request, response);
 
     }
     private void handleException(HttpServletResponse response, Exception e, int statusCode, String msg) throws IOException {

@@ -6,6 +6,7 @@ import io.moun.api.member.service.MemberApplicationService;
 import io.moun.api.member.service.MemberService;
 import io.moun.api.security.service.AuthService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +14,19 @@ import java.security.Principal;
 
 
 @Service
+@RequiredArgsConstructor
 public class MemberApplicationServiceImpl implements MemberApplicationService {
-    private MemberService memberService;
-    private AuthService authService;
-    @Autowired
-    public MemberApplicationServiceImpl(MemberService memberService, AuthService authService) {
-        this.memberService = memberService;
-        this.authService = authService;
-    }
+    private final MemberService memberService;
+    private final AuthService authService;
 
 
     @Override
     @Transactional
     public Member registerMemberAuth(RegisterRequest registerRequest) {
-        Member savedMember =memberService.saveDefault();
-        authService.save(registerRequest,savedMember);
+        Member savedMember = memberService.saveDefault();
+        authService.save(registerRequest, savedMember);
         return savedMember;
     }
-
 
 
     @Override

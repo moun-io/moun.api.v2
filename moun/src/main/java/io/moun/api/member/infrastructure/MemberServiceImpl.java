@@ -7,20 +7,17 @@ import io.moun.api.security.domain.Auth;
 import io.moun.api.security.infrastructure.JwtTokenHelper;
 import io.moun.api.security.service.AuthService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 
 @Service
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-    private JwtTokenHelper jwtTokenHelper;
-    @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, JwtTokenHelper jwtTokenHelper) {
-        this.memberRepository = memberRepository;
-        this.jwtTokenHelper = jwtTokenHelper;
-    }
+//    private final JwtTokenHelper jwtTokenHelper;
 
     @Override
     public Member findById(Long id) {
@@ -32,18 +29,15 @@ public class MemberServiceImpl implements MemberService {
     public Member save(Member member) {
         return memberRepository.save(member);
     }
+
     @Override
-    public Member saveDefault(){
-        Member member= new Member();
+    public Member saveDefault() {
+        Member member = new Member();
         member.setDescription("please introduce yourself");
         member.setProfilePictureUrl("");
         member.setDisplayName("Mounie");
         return memberRepository.save(member);
     }
-
-
-
-
 
 
 }

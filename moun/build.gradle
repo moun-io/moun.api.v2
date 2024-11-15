@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.azure:azure-storage-blob:12.22.0'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
     compileOnly 'org.projectlombok:lombok'
