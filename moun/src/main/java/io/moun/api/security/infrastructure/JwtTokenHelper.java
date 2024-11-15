@@ -22,7 +22,7 @@ import java.util.Date;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class JwtTokenHelper implements IJwtTokenHelper {
     private JwtToken jwtToken;
-    private static final int JWT_EXPIRATION_PERIOD= 4000000;
+    private static final int JWT_EXPIRATION_PERIOD= 40000000;
     private static final String ENV_JWT_SECRET_KEY = "your-32-characters-or-longer-secret-key";
 //            System.getenv("JWT_SECRET_KEY");
     private static final SecretKey JWT_SECRET_KEY = Keys.hmacShaKeyFor(ENV_JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
