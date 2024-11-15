@@ -31,7 +31,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
 
     public Member findByUsername(String username) {
         Auth auth = authService.findAuthByUsername(username);
-        return memberService.findById(auth.getId());
+        return auth.getMember();
     }
 
 
