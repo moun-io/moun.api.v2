@@ -8,7 +8,7 @@ Here's a well-structured outline for your README file, including key sections an
 1. [Project Overview](#1.-project-overview)  
 2. [Features](#features)  
 3. [Architecture](#architecture)  
-4. [Technology Stack](#technology-stack)  
+4. [Technology Stack](#4.-technology-stack)  
 5. [Domain-Driven Design (DDD) Implementation](#domain-driven-design-ddd-implementation)  
 6. [Installation and Setup](#installation-and-setup)  
 7. [API Endpoints](#api-endpoints)  
