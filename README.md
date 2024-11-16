@@ -39,10 +39,10 @@ Moun API V2 is a backend service powering a music auction and sales platform. It
 ---
 
 ## 4. Technology Stack
-- **Language**: Java (or .NET, based on your stack)  
-- **Framework**: Spring Boot (or ASP.NET Core)  
-- **Database**: MySQL/PostgreSQL with an ORM (Hibernate/EF Core)  
-- **Authentication**: JWT-based security  
+- **Language**: Java
+- **Framework**: Spring Boot 
+- **Database**: MySQL with an ORM (JPA/Hibernate)  
+- **Authentication**: JWT-based security + OAuth2.0
 - **Deployment**: Docker and CI/CD pipelines  
 
 ---
@@ -50,8 +50,8 @@ Moun API V2 is a backend service powering a music auction and sales platform. It
 ## 5. Domain-Driven Design (DDD) Implementation
 - **Core Domains**:
   - *Auctions*: Bidding, auction creation, and status tracking.  
-  - *Users*: Registration, authentication, and profiles.  
-  - *Payments*: Payment processing and status updates.  
+  - *Members*: Registration, authentication, and profiles.  
+  - *Songs*: Upload, Remove, Get Query songs.
 - **Aggregates and Entities**: Central objects encapsulating logic.  
 - **Repositories**: Persistent storage abstractions.  
 
