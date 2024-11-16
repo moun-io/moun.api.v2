@@ -72,18 +72,6 @@ Moun API V2 is a backend service powering a music auction and sales platform. It
 ---
 
 ## 7. API Endpoints
-| Endpoint             | Method | Description                |  
-|----------------------|--------|----------------------------|  
-| `/auctions`          | GET    | Fetch active auctions      |  
-| `/auctions/{id}/bid` | POST   | Place a bid on an auction  |  
-| `/users/register`    | POST   | Register a new user        |  
-
-
-Here is a table format for the API endpoints you provided, suitable for your README:
-
----
-
-## API Endpoints
 
 ### Authentication
 | Endpoint          | Method | Description               |
