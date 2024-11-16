@@ -5,16 +5,16 @@ Here's a well-structured outline for your README file, including key sections an
 # Moun API V2
 
 ## Table of Contents
-1. [Project Overview](#1.-project-overview)  
-2. [Features](#features)  
-3. [Architecture](#architecture)  
+1. [Project Overview](#1-project-overview)  
+2. [Features](#2-features)  
+3. [Architecture](#3-architecture)  
 4. [Technology Stack](#4-technology-stack)  
-5. [Domain-Driven Design (DDD) Implementation](#domain-driven-design-ddd-implementation)  
-6. [Installation and Setup](#installation-and-setup)  
-7. [API Endpoints](#api-endpoints)  
-8. [Usage Example](#usage-example)  
-9. [Contribution Guidelines](#contribution-guidelines)  
-10. [License](#license)
+5. [Domain-Driven Design (DDD) Implementation](#5-domain-driven-design-ddd-implementation)  
+6. [Installation and Setup](#6-installation-and-setup)  
+7. [API Endpoints](#7-api-endpoints)  
+8. [Usage Example](#8-usage-example)  
+9. [Contribution Guidelines](#9-contribution-guidelines)  
+10. [License](#10-license)
 
 ---
 
