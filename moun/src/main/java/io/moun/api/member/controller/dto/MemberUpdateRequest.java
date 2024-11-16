@@ -16,7 +16,6 @@ import java.util.List;
 public class MemberUpdateRequest {
     @NotNull
     private String displayName;
-    @NotNull
     private List<Position> positions = new ArrayList<>();
 
 

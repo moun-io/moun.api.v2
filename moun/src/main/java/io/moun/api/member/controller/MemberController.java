@@ -48,7 +48,7 @@ public class MemberController {
     }
 
     @PutMapping
-    public ResponseEntity<MemberUpdateRequest> updateMember(@Valid @RequestBody MemberUpdateRequest memberUpdateRequest) {
+    public ResponseEntity<MemberUpdateRequest> updateMember( @RequestBody MemberUpdateRequest memberUpdateRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(memberUpdateRequest);
     }
 }
