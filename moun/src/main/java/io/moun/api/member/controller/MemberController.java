@@ -9,6 +9,7 @@ import io.moun.api.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.security.Principal;
 public class MemberController {
     private final MemberApplicationService memberApplicationService;
     private final MemberService memberService;
+    private final ModelMapper modelMapper;
 
 
     @GetMapping
@@ -30,9 +32,10 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> getMember(@PathVariable @Valid Long id) {
+    public ResponseEntity<MemberResponse> getMember(@PathVariable @Valid Long id) {
         Member member = memberService.findById(id);
-        return ResponseEntity.ok(member);
+        MemberResponse memberResponse = modelMapper.map(member, MemberResponse.class);
+        return ResponseEntity.ok(memberResponse);
     }
 //    @GetMapping("/me")
 //    public ResponseEntity<MemberResponse> getMember(Principal principal) {
