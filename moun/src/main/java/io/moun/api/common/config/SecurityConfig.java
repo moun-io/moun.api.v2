@@ -41,7 +41,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth)-> auth
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/members").permitAll()// you don't need to put context-path here
+                        .requestMatchers(HttpMethod.POST, "/members").permitAll()// you don't need to put context-path here
+                        .requestMatchers(HttpMethod.GET, "/members/**").permitAll()// you don't need to put context-path here
+
                         .anyRequest().authenticated())
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

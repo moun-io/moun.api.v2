@@ -11,7 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -23,8 +25,19 @@ public class MemberServiceImpl implements MemberService {
 //    private final JwtTokenHelper jwtTokenHelper;
 
     @Override
+
     public Member findById(Long id) {
-        return memberRepository.findById(id).orElse(null);
+        return memberRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+
+    }
+
+    @Transactional
+    public MemberResponse findMemberResponseById(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+        return modelMapper.map(member, MemberResponse.class);
+
     }
 
 //    @Override
@@ -40,14 +53,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Member saveDefault() {
         Member member = new Member();
         member.setDescription("please introduce yourself");
         member.setProfilePictureUrl("");
         member.setDisplayName("Mounie");
+        member.setVerified(false);
         return memberRepository.save(member);
     }
-
 
 
 }

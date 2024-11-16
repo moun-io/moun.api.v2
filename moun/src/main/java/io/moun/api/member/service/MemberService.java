@@ -7,7 +7,11 @@ import java.security.Principal;
 
 public interface MemberService {
     public Member findById(Long id);
+
+    public MemberResponse findMemberResponseById(Long id);
+
     public Member save(Member member);
+
     public Member saveDefault();
 //    public MemberResponse findByUsername(String username);
 }

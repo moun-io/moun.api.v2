@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,5 +39,5 @@ public class Member extends BaseEntity {
     private String profilePictureUrl;
 
     @OneToMany(fetch = FetchType.LAZY,  mappedBy = "member")
-    private List<Song> songs;
+    private List<Song> songs = new ArrayList<>();
 }

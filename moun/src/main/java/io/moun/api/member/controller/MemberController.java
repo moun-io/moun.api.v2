@@ -33,8 +33,7 @@ public class MemberController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberResponse> getMember(@PathVariable @Valid Long id) {
-        Member member = memberService.findById(id);
-        MemberResponse memberResponse = modelMapper.map(member, MemberResponse.class);
+        MemberResponse memberResponse = memberService.findMemberResponseById(id);// 로그 추가
         return ResponseEntity.ok(memberResponse);
     }
 //    @GetMapping("/me")
@@ -51,7 +50,7 @@ public class MemberController {
     }
 
     @PutMapping
-    public ResponseEntity<MemberUpdateRequest> updateMember( @RequestBody MemberUpdateRequest memberUpdateRequest) {
+    public ResponseEntity<MemberUpdateRequest> updateMember(@RequestBody MemberUpdateRequest memberUpdateRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(memberUpdateRequest);
     }
 }
