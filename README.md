@@ -78,6 +78,51 @@ Moun API V2 is a backend service powering a music auction and sales platform. It
 | `/auctions/{id}/bid` | POST   | Place a bid on an auction  |  
 | `/users/register`    | POST   | Register a new user        |  
 
+
+Here is a table format for the API endpoints you provided, suitable for your README:
+
+---
+
+## API Endpoints
+
+### Authentication
+| Endpoint          | Method | Description               |
+|-------------------|--------|---------------------------|
+| `/auth/check`  | POST   | check if the token is valid |
+| `/auth/login`     | POST   | Authenticate a user (sign in) |
+
+### Member
+| Endpoint                        | Method | Description                            |
+|---------------------------------|--------|----------------------------------------|
+| `/members`                      | POST   | Create a new member + Sign-up                  |
+| `/members`                 | PUT    | Update artist information             |
+| `/members`                      | GET    | Get all members                        |
+| `/members?position=x`           | GET    | Get members by position                |
+| `/members/{id}`                 | GET    | Get member by ID                       |
+| `/members/{id}`                 | DELETE | Delete artist                          |
+
+### Song/Auction
+| Endpoint                        | Method | Description                            |
+|---------------------------------|--------|----------------------------------------|
+| `/songs/{id}`                   | GET    | Get song by ID                         |
+| `/songs`                        | GET    | Get songs by date                      |
+| `/songs?genre=x&title=x&is_desc=false` | GET    | Get songs by query (genre, title, desc) |
+| `/songs?sortby=views&limit=4`   | GET    | Get top 4 songs by popularity          |
+| `/songs?sortby=expired_date&limit=4&isdesc=true` | GET    | Get top 4 songs by expired date |
+| `/songs`                        | POST   | Create a new song                      |
+| `/songs/{id}`                   | PUT    | Update song                            |
+| `/songs/{id}`                   | DELETE | Delete a song                          |
+
+### Bids
+| Endpoint                        | Method | Description                            |
+|---------------------------------|--------|----------------------------------------|
+| `/bids`                         | GET    | Get all your bids                      |
+| `/bids/songs/{songid}`          | POST   | Create a bid on a song                 |
+| `/bids/{id}`                    | DELETE | Delete your bid from a song            |
+
+--- 
+
+You can copy and paste this into your README file. Let me know if you'd like further adjustments!
 ---
 
 ## 8. Usage Example
