@@ -1,7 +1,5 @@
-package io.moun.api.memberposition;
+package io.moun.api.member.domain;
 
-import io.moun.api.member.domain.Member;
-import io.moun.api.position.Position;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +28,7 @@ public class MemberPositionRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

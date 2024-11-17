@@ -1,11 +1,8 @@
 package io.moun.api.member.controller.dto;
 
 import io.moun.api.member.domain.SNS;
-import io.moun.api.position.Position;
+import io.moun.api.member.domain.Position;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

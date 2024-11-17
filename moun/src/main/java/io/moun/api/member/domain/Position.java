@@ -1,16 +1,22 @@
-package io.moun.api.position;
+package io.moun.api.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.moun.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+//@Entity
+//@Immutable
+
 @Entity
-@Immutable
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Position {
     @Id
@@ -20,8 +26,8 @@ public class Position {
     @Enumerated
     private PositionType positionType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @JsonIgnore
-    private Member member;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id")
+//    @JsonIgnore
+    private List<MemberPositionRelation> memberPositionRelationList = new ArrayList<>();
 }
