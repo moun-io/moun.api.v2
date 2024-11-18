@@ -20,40 +20,26 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     @Embedded
     private SNS sns;
-    
     @NotNull
     private String displayName;
     @NotNull
     private String description;
     @NotNull
     private boolean verified;
-
     private String profilePictureUrl;
-
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Position> positions = new ArrayList<>();
 
 
-    public MemberResponse toMemberResponse(ModelMapper modelMapper) {
-
-        // 기본 필드 매핑
-        MemberResponse response = modelMapper.map(this, MemberResponse.class);
-
-        // positions 리스트에서 PositionType만 추출하여 반환
-        List<PositionType> positionTypes = new ArrayList<>();
-        for (Position position : this.positions) {
-            positionTypes.add(position.getPositionType());
-        }
-
-        // positionType 필드 설정
-        response.setPositionType(positionTypes);
-
-        return response;
+    public void addPosition (Position position){
+        positions.add(new Position());
     }
+    public void addPosition (PositionType positionType){
+        positions.add(new Position(positionType));
+    }
+
 
 
     //    @OneToOne(fetch = FetchType.LAZY) // 실제로 데이터 로딩하지 않음

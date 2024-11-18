@@ -14,12 +14,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    @Override
     public Member save(Member member) {
         return memberRepository.save(member);
     }
-
-    @Override
     @Transactional
     public Member saveDefault() {
         Member member = new Member();
@@ -28,5 +25,15 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         member.setDisplayName("Mounie");
         member.setVerified(false);
         return memberRepository.save(member);
+    }
+
+    public Member update(Member member) {
+        Member existingMember = memberRepository.findById(member.getId()).orElseThrow(() -> new RuntimeException("Member not found"));
+        existingMember.setDescription(member.getDescription());
+        existingMember.setProfilePictureUrl(member.getProfilePictureUrl());
+        existingMember.setDisplayName(member.getDisplayName());
+        existingMember.setPositions(member.getPositions());
+        existingMember.setSns(member.getSns());
+        return memberRepository.save(existingMember);
     }
 }

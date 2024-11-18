@@ -1,7 +1,9 @@
 package io.moun.api.member.infrastructure;
 
 import io.moun.api.member.controller.dto.MemberResponse;
+import io.moun.api.member.controller.dto.MemberUpdateRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
+import io.moun.api.member.controller.mapper.MemberMapper;
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.service.MemberApplicationService;
 import io.moun.api.member.service.MemberCommandService;
@@ -22,7 +24,8 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
     private final AuthService authService;
-    private final ModelMapper modelMapper;
+    private final MemberMapper memberMapper;
+
 
     public Member findByUsername(String username) {
         Auth auth = authService.findAuthByUsername(username);
@@ -31,10 +34,11 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
 
     @Override
     public MemberResponse findById(Long id) {
-        return memberQueryService.findById(id).toMemberResponse(modelMapper);
+        return memberMapper.toMemberResponse(memberQueryService.findById(id));
     }
+
     public MemberResponse findWithPositionsById(Long id) {
-        return memberQueryService.findWithPositionsById(id).toMemberResponse(modelMapper);
+        return memberMapper.toMemberResponse(memberQueryService.findWithPositionsById(id));
     }
 
 
@@ -43,11 +47,14 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     public MemberResponse register(RegisterRequest registerRequest) {
         Member savedMember = memberCommandService.saveDefault();
         authService.save(registerRequest, savedMember);
-        return savedMember.toMemberResponse();
+        return memberMapper.toMemberResponse(savedMember);
     }
 
-
-
+    public MemberResponse update(MemberUpdateRequest memberUpdateRequest) {
+        Member member = memberMapper.toMember(memberUpdateRequest);
+        memberCommandService.update(member);
+        return memberMapper.toMemberResponse(member);
+    }
 
     @Override
     public void delete(String username) {

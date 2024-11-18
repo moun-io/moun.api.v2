@@ -23,8 +23,14 @@ public class Position {
     @Enumerated(value = EnumType.STRING)
     private PositionType positionType;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     @JsonIgnore
     private Member member; // Member와의 관계
+
+    public Position(PositionType positionType) {
+        this.positionType = positionType;
+    }
 }
+
