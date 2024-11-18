@@ -38,8 +38,7 @@ public class Member extends BaseEntity {
     private List<Position> positions = new ArrayList<>();
 
 
-    public MemberResponse toMemberResponse() {
-        ModelMapper modelMapper = new ModelMapper();
+    public MemberResponse toMemberResponse(ModelMapper modelMapper) {
 
         // 기본 필드 매핑
         MemberResponse response = modelMapper.map(this, MemberResponse.class);

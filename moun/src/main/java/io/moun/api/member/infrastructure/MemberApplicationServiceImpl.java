@@ -10,6 +10,7 @@ import io.moun.api.security.domain.Auth;
 import io.moun.api.security.service.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
     private final AuthService authService;
+    private final ModelMapper modelMapper;
 
     public Member findByUsername(String username) {
         Auth auth = authService.findAuthByUsername(username);
@@ -29,10 +31,10 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
 
     @Override
     public MemberResponse findById(Long id) {
-        return memberQueryService.findById(id).toMemberResponse();
+        return memberQueryService.findById(id).toMemberResponse(modelMapper);
     }
     public MemberResponse findWithPositionsById(Long id) {
-        return memberQueryService.findWithPositionsById(id).toMemberResponse();
+        return memberQueryService.findWithPositionsById(id).toMemberResponse(modelMapper);
     }
 
 
