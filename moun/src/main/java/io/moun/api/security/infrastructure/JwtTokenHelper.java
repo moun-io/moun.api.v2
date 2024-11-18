@@ -64,11 +64,11 @@ public class JwtTokenHelper implements IJwtTokenHelper {
                 .getPayload();
         return claims.getSubject();
     }
-    public String getMemberId() {
+    public Long getMemberId() {
         Claims claims = JWT_PARSER
                 .parseSignedClaims(jwtToken.getValue())
                 .getPayload();
-        return claims.get("member_id", String.class);
+        return Long.parseLong(claims.get("member_id", String.class));
     }
 
 //    public void setTokenFromRequest(HttpServletRequest request) {
