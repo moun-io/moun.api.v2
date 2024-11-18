@@ -8,5 +8,5 @@ public enum PositionType {
     VOCAL,
     RAPPER,
     ENGINEER,
-    ANR
+    ANR,
 }

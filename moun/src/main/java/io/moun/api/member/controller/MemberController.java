@@ -31,11 +31,18 @@ public class MemberController {
         return ResponseEntity.ok("Members");
     }
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<MemberResponse> getMember(@PathVariable @Valid Long id) {
+//        MemberResponse memberResponse = memberService.findMemberResponseById(id);// 로그 추가
+//        return ResponseEntity.ok(memberResponse);
+//    }
     @GetMapping("/{id}")
-    public ResponseEntity<MemberResponse> getMember(@PathVariable @Valid Long id) {
-        MemberResponse memberResponse = memberService.findMemberResponseById(id);// 로그 추가
+
+    public ResponseEntity<MemberResponse> getMember(@PathVariable Long id) {
+        MemberResponse memberResponse = memberService.findMemberResponseWithPositionById(id);// 로그 추가
         return ResponseEntity.ok(memberResponse);
     }
+
 //    @GetMapping("/me")
 //    public ResponseEntity<MemberResponse> getMember(Principal principal) {
 //        MemberResponse memberResponse = memberService.findByUsername(principal.getName());

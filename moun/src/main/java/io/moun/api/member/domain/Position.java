@@ -6,10 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Immutable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //@Entity
 //@Immutable
@@ -21,13 +17,14 @@ import java.util.List;
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
     
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private PositionType positionType;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_id")
-//    @JsonIgnore
-    private List<MemberPositionRelation> memberPositionRelationList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    @JsonIgnore
+    private Member member; // Member와의 관계
 }

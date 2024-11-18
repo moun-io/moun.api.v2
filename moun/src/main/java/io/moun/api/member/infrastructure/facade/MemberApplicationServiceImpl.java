@@ -1,4 +1,4 @@
-package io.moun.api.member.infrastructure;
+package io.moun.api.member.infrastructure.facade;
 
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.member.domain.Member;
@@ -8,10 +8,7 @@ import io.moun.api.security.domain.Auth;
 import io.moun.api.security.service.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 
 
 @Service
@@ -19,6 +16,7 @@ import java.security.Principal;
 public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final MemberService memberService;
     private final AuthService authService;
+
 
 
     @Override

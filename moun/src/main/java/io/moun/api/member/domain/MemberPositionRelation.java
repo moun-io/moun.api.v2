@@ -12,28 +12,30 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-@Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "member_position_relation",
-        uniqueConstraints = {@UniqueConstraint(
-                name = "UniqueMemberAndPosition",
-                columnNames = {
-                        "member_id", "position_id"
-                }
-        )}
-)
-public class MemberPositionRelation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_id")
-    private Position position;
-}
+//
+//@Entity
+//@Getter
+////@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@NoArgsConstructor
+//@Table(name = "member_position_relation",
+//
+//        uniqueConstraints = {@UniqueConstraint(
+//                name = "UniqueMemberAndPosition",
+//                columnNames = {
+//                        "member_id", "position_id"
+//                }
+//        )}
+//)
+//public class MemberPositionRelation {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id")
+//    private Member member;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "position_id")
+//    private Position position;
+//}

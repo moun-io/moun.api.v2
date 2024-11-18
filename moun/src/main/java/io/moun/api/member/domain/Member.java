@@ -19,9 +19,6 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @OneToOne(fetch = FetchType.LAZY) // 실제로 데이터 로딩하지 않음
-//    @JoinColumn(name = "auth_username", referencedColumnName = "username") // 외래 키 설정
-//    private Auth auth; // 실제로 User 객체를 로딩하지 않음
 
     @Embedded
     private SNS sns;
@@ -35,14 +32,20 @@ public class Member extends BaseEntity {
 
     private String profilePictureUrl;
 
-    @OneToMany
-    private List<MemberPositionRelation> memberPositionRelations = new ArrayList<>();
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Position> positions = new ArrayList<>();
+
+
+
+    //    @OneToOne(fetch = FetchType.LAZY) // 실제로 데이터 로딩하지 않음
+//    @JoinColumn(name = "auth_username", referencedColumnName = "username") // 외래 키 설정
+//    private Auth auth; // 실제로 User 객체를 로딩하지 않음
+
+
 //    @ElementCollection
 //    @CollectionTable(name = "member_position", joinColumns = @JoinColumn(name = "member_id"))
 //    private List<Position> positions = new ArrayList<>();
 //    @OneToMany(fetch = FetchType.LAZY,  mappedBy = "member")
 //    private List<Song> songs = new ArrayList<>();
 //
-//    @ManyToMany(fetch = FetchType.LAZY, mappedBy="member", cascade = CascadeType.ALL)
-//    private List<Position> positions = new ArrayList<>();
 }

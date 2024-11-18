@@ -3,6 +3,7 @@ package io.moun.api.member.infrastructure;
 import io.moun.api.member.controller.dto.MemberResponse;
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.domain.repository.MemberRepository;
+import io.moun.api.member.domain.repository.PositionRepository;
 import io.moun.api.member.service.MemberService;
 import io.moun.api.security.domain.Auth;
 import io.moun.api.security.infrastructure.JwtTokenHelper;
@@ -22,6 +23,7 @@ import java.security.Principal;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
+    private final PositionRepository positionRepository;
 //    private final JwtTokenHelper jwtTokenHelper;
 
     @Override
@@ -29,7 +31,12 @@ public class MemberServiceImpl implements MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+    }
 
+    public MemberResponse findMemberResponseWithPositionById(Long id) {
+        Member member =memberRepository.findMemberWithPositionById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+        return modelMapper.map(member, MemberResponse.class);
     }
 
     @Transactional
@@ -37,7 +44,6 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
         return modelMapper.map(member, MemberResponse.class);
-
     }
 
 //    @Override
