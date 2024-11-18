@@ -43,12 +43,16 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         return jwtToken;
     }
 
-    public void generateToken(Authentication authentication) {
+    public void generateToken(Authentication authentication, Long MemberId) {
+        Claims claims = Jwts.claims()
+                .add("member_id",MemberId.toString())
+                .build();
         String tokenValue =Jwts.builder()
                 .subject(authentication.getName())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_PERIOD))
                 .signWith(JWT_SECRET_KEY)
+                .claims(claims)
                 .compact();
         this.jwtToken = new JwtToken(tokenValue);
     }
@@ -59,6 +63,12 @@ public class JwtTokenHelper implements IJwtTokenHelper {
                 .parseSignedClaims(jwtToken.getValue())
                 .getPayload();
         return claims.getSubject();
+    }
+    public String getMemberId() {
+        Claims claims = JWT_PARSER
+                .parseSignedClaims(jwtToken.getValue())
+                .getPayload();
+        return claims.get("member_id", String.class);
     }
 
 //    public void setTokenFromRequest(HttpServletRequest request) {

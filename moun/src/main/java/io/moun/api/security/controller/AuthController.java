@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -29,8 +31,9 @@ AuthController {
     }
 
     @PostMapping("/check")
-    public ResponseEntity<String> check(@Valid @RequestBody CheckRequest checkRequest) {
+    public ResponseEntity<String> check(@Valid @RequestBody CheckRequest checkRequest,@RequestHeader("Authorization") String jwtTokenValue) {
+
         authService.check(checkRequest);
-        return ResponseEntity.status(HttpStatus.OK).body("Valid");
+        return ResponseEntity.status(HttpStatus.OK).body(jwtTokenValue + "Valid");
     }
 }

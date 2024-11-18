@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 public interface IJwtTokenHelper {
     public JwtToken getJwtToken();
 
-    public void generateToken(Authentication authentication);
+    public void generateToken(Authentication authentication,Long memberId);
 
     public String getUsername();
 
