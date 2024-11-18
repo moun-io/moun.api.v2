@@ -27,10 +27,4 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         return member;
     }
 
-//    @Override
-//    public MemberResponse findByUsername(String username) {
-//        Member member = memberRepository.findByUsername(username).orElse(null);
-//        return modelMapper.map(member, MemberResponse.class);
-//    }
-
 }

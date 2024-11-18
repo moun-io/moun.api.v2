@@ -1,6 +1,7 @@
 package io.moun.api.security.infrastructure;
 
 import io.moun.api.member.controller.dto.MemberResponse;
+import io.moun.api.member.controller.mapper.MemberMapper;
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.domain.repository.MemberRepository;
 import io.moun.api.member.service.MemberQueryService;
@@ -39,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final ModelMapper modelMapper;
     private final MemberQueryService memberQueryService;
     private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper;
 
 
     @Override
@@ -67,10 +69,10 @@ public class AuthServiceImpl implements AuthService {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Auth auth = authRepository.findByUsername(loginRequest.getUsername())
-                    .orElseThrow(()-> new AuthenticationCredentialsNotFoundException(loginRequest.getUsername()));
+                    .orElseThrow(() -> new AuthenticationCredentialsNotFoundException(loginRequest.getUsername()));
             Member member = auth.getMember();
-            jwtTokenHelper.generateToken(authentication,member.getId());
-            MemberResponse memberResponse = modelMapper.map(member,MemberResponse.class);
+            jwtTokenHelper.generateToken(authentication, member.getId());
+            MemberResponse memberResponse = memberMapper.toMemberResponse(member);
             JwtToken jwtToken = jwtTokenHelper.getJwtToken();
             return new LoginResponse(jwtToken, memberResponse);
         } catch (AuthenticationException e) {

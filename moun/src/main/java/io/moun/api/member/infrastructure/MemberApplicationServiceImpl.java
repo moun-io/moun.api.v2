@@ -52,9 +52,9 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
         return memberMapper.toMemberResponse(savedMember);
     }
 
-    public MemberResponse update(MemberUpdateRequest memberUpdateRequest,Long id) {
+    public MemberResponse update(MemberUpdateRequest memberUpdateRequest, Long id) {
         Member member = memberMapper.toMember(memberUpdateRequest);
-        memberCommandService.update(member,id);
+        memberCommandService.update(member, id);
         return memberMapper.toMemberResponse(member);
 
     }

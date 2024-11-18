@@ -33,11 +33,9 @@ public class Member extends BaseEntity {
     private List<Position> positions = new ArrayList<>();
 
 
+
     public void addPosition (Position position){
-        positions.add(new Position());
-    }
-    public void addPosition (PositionType positionType){
-        positions.add(new Position(positionType,this));
+        positions.add(position);
     }
 
 

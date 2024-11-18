@@ -27,6 +27,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     public Member save(Member member) {
         return memberRepository.save(member);
     }
+
     @Transactional
     public Member saveDefault() {
         Member member = new Member();
@@ -38,19 +39,18 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Transactional
-    public Member update(Member member,Long id) {
+    public Member update(Member member, Long id) {
         if (!jwtTokenHelper.getMemberId().equals(id))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        Member existingMember = memberRepository.findMemberWithPositionById(id).orElseThrow(()-> new EntityNotFoundException("MEMBER NOT FOUND"));
+        Member existingMember = memberRepository.findMemberWithPositionById(id).orElseThrow(() -> new EntityNotFoundException("MEMBER NOT FOUND"));
         existingMember.setDescription(member.getDescription());
         existingMember.setProfilePictureUrl(member.getProfilePictureUrl());
         existingMember.setDisplayName(member.getDisplayName());
         existingMember.setSns(member.getSns());
         memberRepository.save(existingMember);
         positionRepository.deleteAllByMemberId(id);  // Now delete the positions
-        for(Position newPosition : member.getPositions()){
+        for (Position newPosition : member.getPositions()) {
             newPosition.setMember(existingMember);
-
             positionRepository.save(newPosition);
         }
         return existingMember;

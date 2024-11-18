@@ -11,13 +11,12 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private int id;
-    
+
     @Enumerated(value = EnumType.STRING)
     private PositionType positionType;
 
@@ -25,7 +24,7 @@ public class Position {
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id", nullable = false)
     @JsonIgnore
-    private Member member; // Member와의 관계
+    private Member member;
 
     public Position(PositionType positionType , Member member) {
         this.positionType = positionType;
