@@ -39,8 +39,8 @@ public class MemberController {
     @GetMapping("/{id}")
 
     public ResponseEntity<MemberResponse> getMember(@PathVariable Long id) {
-        MemberResponse memberResponse = memberService.findMemberResponseWithPositionById(id);// 로그 추가
-        return ResponseEntity.ok(memberResponse);
+        Member member = memberService.findWithPositionById(id);// 로그 추가
+        return ResponseEntity.ok(member.toMemberResponse());
     }
 
 //    @GetMapping("/me")

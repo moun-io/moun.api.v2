@@ -14,5 +14,5 @@ public interface MemberService {
 
     public Member saveDefault();
 //    public MemberResponse findByUsername(String username);
-    public MemberResponse findMemberResponseWithPositionById(Long id);
+    public Member findWithPositionById(Long id);
 }

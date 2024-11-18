@@ -33,17 +33,17 @@ public class MemberServiceImpl implements MemberService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
     }
 
-    public MemberResponse findMemberResponseWithPositionById(Long id) {
+    public Member findWithPositionById(Long id) {
         Member member =memberRepository.findMemberWithPositionById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
-        return modelMapper.map(member, MemberResponse.class);
+        return member;
     }
 
     @Transactional
     public MemberResponse findMemberResponseById(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
-        return modelMapper.map(member, MemberResponse.class);
+        return member.toMemberResponse();
     }
 
 //    @Override
