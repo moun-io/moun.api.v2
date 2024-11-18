@@ -29,7 +29,7 @@ public class Member extends BaseEntity {
     @NotNull
     private boolean verified;
     private String profilePictureUrl;
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Position> positions = new ArrayList<>();
 
 
@@ -37,20 +37,8 @@ public class Member extends BaseEntity {
         positions.add(new Position());
     }
     public void addPosition (PositionType positionType){
-        positions.add(new Position(positionType));
+        positions.add(new Position(positionType,this));
     }
 
 
-
-    //    @OneToOne(fetch = FetchType.LAZY) // 실제로 데이터 로딩하지 않음
-//    @JoinColumn(name = "auth_username", referencedColumnName = "username") // 외래 키 설정
-//    private Auth auth; // 실제로 User 객체를 로딩하지 않음
-
-
-//    @ElementCollection
-//    @CollectionTable(name = "member_position", joinColumns = @JoinColumn(name = "member_id"))
-//    private List<Position> positions = new ArrayList<>();
-//    @OneToMany(fetch = FetchType.LAZY,  mappedBy = "member")
-//    private List<Song> songs = new ArrayList<>();
-//
 }

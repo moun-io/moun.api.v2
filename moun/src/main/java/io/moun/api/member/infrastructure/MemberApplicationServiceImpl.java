@@ -9,6 +9,7 @@ import io.moun.api.member.service.MemberApplicationService;
 import io.moun.api.member.service.MemberCommandService;
 import io.moun.api.member.service.MemberQueryService;
 import io.moun.api.security.domain.Auth;
+import io.moun.api.security.infrastructure.JwtTokenHelper;
 import io.moun.api.security.service.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final MemberCommandService memberCommandService;
     private final AuthService authService;
     private final MemberMapper memberMapper;
+    private final JwtTokenHelper jwtTokenHelper;
 
 
     public Member findByUsername(String username) {
@@ -50,10 +52,11 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
         return memberMapper.toMemberResponse(savedMember);
     }
 
-    public MemberResponse update(MemberUpdateRequest memberUpdateRequest) {
+    public MemberResponse update(MemberUpdateRequest memberUpdateRequest,Long id) {
         Member member = memberMapper.toMember(memberUpdateRequest);
-        memberCommandService.update(member);
+        memberCommandService.update(member,id);
         return memberMapper.toMemberResponse(member);
+
     }
 
     @Override

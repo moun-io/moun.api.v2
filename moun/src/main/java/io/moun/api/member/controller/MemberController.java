@@ -26,9 +26,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
     }
 
-    @PutMapping
-    public ResponseEntity<MemberUpdateRequest> updateMember(@RequestBody MemberUpdateRequest memberUpdateRequest,Principal principal) {
-        System.out.println(principal.getName());
+    @PutMapping("/{id}")
+    public ResponseEntity<MemberUpdateRequest> updateMember(@RequestBody MemberUpdateRequest memberUpdateRequest, @PathVariable Long id) {
+        memberApplicationService.update(memberUpdateRequest, id);
         return ResponseEntity.status(HttpStatus.OK).body(memberUpdateRequest);
     }
 

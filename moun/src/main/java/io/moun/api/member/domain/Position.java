@@ -2,10 +2,7 @@ package io.moun.api.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 //@Entity
 //@Immutable
@@ -14,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,13 +22,14 @@ public class Position {
     private PositionType positionType;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id", nullable = false)
     @JsonIgnore
     private Member member; // Member와의 관계
 
-    public Position(PositionType positionType) {
+    public Position(PositionType positionType , Member member) {
         this.positionType = positionType;
+        this.member = member;
     }
 }
 
