@@ -1,5 +1,6 @@
 package io.moun.api.member.controller.dto;
 
+import io.moun.api.member.domain.PositionType;
 import io.moun.api.member.domain.SNS;
 import io.moun.api.member.domain.Position;
 import jakarta.persistence.Embedded;
@@ -13,7 +14,7 @@ import java.util.List;
 public class MemberUpdateRequest {
     @NotNull
     private String displayName;
-    private List<Position> positions = new ArrayList<>();
+    private List<PositionType> positionTypes = new ArrayList<>();
 
 
     @Embedded
