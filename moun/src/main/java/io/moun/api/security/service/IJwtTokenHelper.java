@@ -18,4 +18,5 @@ public interface IJwtTokenHelper {
 
     public Claims getClaims();
 
+    public Long getMemberId();
 }
