@@ -81,10 +81,10 @@ Moun API V2 is a backend service powering a music auction and sales platform. It
 | Endpoint                        | Method | Description                            |
 |---------------------------------|--------|----------------------------------------|
 | `/members`                      | POST   | Create a new member + Sign-up                  |
-| `/members`                 | PUT    | Update artist information             |
 | `/members`                      | GET    | Get all members                        |
 | `/members?position=x`           | GET    | Get members by position                |
 | `/members/{id}`                 | GET    | Get member by ID                       |
+| `/members/{id}`                 | PUT    | Update artist information             |
 | `/members/{id}`                 | DELETE | Delete artist                          |
 
 ### Song/Auction
