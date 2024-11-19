@@ -16,8 +16,13 @@ import java.util.List;
 public class Auth {
 
 
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
+    @Column(unique = true)
     private String username;
     @NotNull
     private String password;
@@ -26,7 +31,7 @@ public class Auth {
     private Member member;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "username")
+    @JoinColumn(name = "id")
     private List<Role> roles = new ArrayList<Role>();
 
     public void addRole(String roleType) {

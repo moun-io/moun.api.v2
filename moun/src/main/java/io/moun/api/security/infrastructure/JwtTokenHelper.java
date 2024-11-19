@@ -1,6 +1,7 @@
 package io.moun.api.security.infrastructure;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -42,12 +43,16 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         return jwtToken;
     }
 
-    public void generateToken(Authentication authentication) {
+    public void generateToken(Authentication authentication, Long MemberId) {
+        Claims claims = Jwts.claims()
+                .add("member_id",MemberId.toString())
+                .build();
         String tokenValue =Jwts.builder()
                 .subject(authentication.getName())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_PERIOD))
                 .signWith(JWT_SECRET_KEY)
+                .claims(claims)
                 .compact();
         this.jwtToken = new JwtToken(tokenValue);
     }
@@ -58,6 +63,12 @@ public class JwtTokenHelper implements IJwtTokenHelper {
                 .parseSignedClaims(jwtToken.getValue())
                 .getPayload();
         return claims.getSubject();
+    }
+    public Long getMemberId() {
+        Claims claims = JWT_PARSER
+                .parseSignedClaims(jwtToken.getValue())
+                .getPayload();
+        return Long.parseLong(claims.get("member_id", String.class));
     }
 
 //    public void setTokenFromRequest(HttpServletRequest request) {
@@ -71,7 +82,7 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         try{
             JWT_PARSER.parseSignedClaims(jwtToken.getValue());
             return true;
-        } catch(Exception e){System.out.println(e.getMessage());
+        } catch(Exception e){
             return false;
         }
     }
