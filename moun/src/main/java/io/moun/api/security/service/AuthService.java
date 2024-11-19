@@ -9,11 +9,11 @@ import io.moun.api.security.domain.Auth;
 import io.moun.api.security.domain.vo.JwtToken;
 
 public interface AuthService {
-    public void save(RegisterRequest registerRequest, Member member);
+    void save(RegisterRequest registerRequest, Member member);
 
-    public LoginResponse login(LoginRequest loginRequest);
+    LoginResponse login(LoginRequest loginRequest);
 
-    public void check(CheckRequest checkRequest);
+    void check(CheckRequest checkRequest);
 
-    public Auth findAuthByUsername(String username);
+    Auth findAuthByUsername(String username);
 }

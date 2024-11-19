@@ -7,8 +7,9 @@ import java.security.Principal;
 
 public interface MemberCommandService {
 
-    public Member save(Member member);
+    Member save(Member member);
 
-    public Member saveDefault();
-    public Member update(Member member,Long id);
+    Member saveDefault();
+
+    Member update(Member member, Long id);
 }
