@@ -44,6 +44,9 @@ public class JwtTokenHelper implements IJwtTokenHelper {
     public JwtToken getJwtToken() {
         return jwtToken;
     }
+    public void setJwtToken(JwtToken jwt) {
+        this.jwtToken = jwt;
+    }
 
     public void generateToken(Authentication authentication, Long MemberId) {
         Claims claims = Jwts.claims()
@@ -79,14 +82,8 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         try {
             JWT_PARSER.parseSignedClaims(this.jwtToken.getValue());
             return true;
-        } catch (MalformedJwtException e) {
-            throw new IllegalStateException("INVALID JWT TOKEN", e);
-        } catch (ExpiredJwtException e) {
-            throw new IllegalStateException("EXPIRED_JWT TOKEN", e);
-        } catch (UnsupportedJwtException | SignatureException e) {
-            throw new IllegalStateException("UNSUPPORTED_JWT TOKEN", e);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("EMPTY", e);
+        } catch (Exception e) {
+            return false;
         }
     }
 
