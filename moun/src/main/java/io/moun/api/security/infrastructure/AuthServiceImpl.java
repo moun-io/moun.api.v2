@@ -10,8 +10,8 @@ import io.moun.api.security.controller.dto.LoginRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.security.controller.dto.LoginResponse;
 import io.moun.api.security.domain.Auth;
+import io.moun.api.security.domain.Role;
 import io.moun.api.security.domain.repository.AuthRepository;
-import io.moun.api.security.domain.repository.RoleRepository;
 import io.moun.api.security.domain.vo.JwtToken;
 import io.moun.api.security.exception.UsernameAlreadyExistsException;
 import io.moun.api.security.service.AuthService;
@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final IJwtTokenHelper jwtTokenHelper;
     private final ModelMapper modelMapper;
@@ -52,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         Auth auth = new Auth();
         auth.setUsername(registerRequest.getUsername());
         auth.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        auth.addRole("ROLE_USER");
+        auth.setRole(Role.USER);
         auth.setMember(member);
         authRepository.save(auth);
     }

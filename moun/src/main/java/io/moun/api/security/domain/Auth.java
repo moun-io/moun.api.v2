@@ -6,15 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @Table(name = "users")
 public class Auth {
-
 
 
     @Id
@@ -30,11 +26,12 @@ public class Auth {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Member member;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
-    private List<Role> roles = new ArrayList<Role>();
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Role role;
+//
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<Role> roles = new ArrayList<Role>();
 
-    public void addRole(String roleType) {
-        roles.add(new Role(username, roleType));
-    }
+
 }

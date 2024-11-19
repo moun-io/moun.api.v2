@@ -23,9 +23,9 @@ import java.util.Date;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class JwtTokenHelper implements IJwtTokenHelper {
     private JwtToken jwtToken;
-    private static final int JWT_EXPIRATION_PERIOD= 40000000;
+    private static final int JWT_EXPIRATION_PERIOD = 40000000;
     private static final String ENV_JWT_SECRET_KEY = "your-32-characters-or-longer-secret-key";
-//            System.getenv("JWT_SECRET_KEY");
+    //            System.getenv("JWT_SECRET_KEY");
     private static final SecretKey JWT_SECRET_KEY = Keys.hmacShaKeyFor(ENV_JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     private static final JwtParser JWT_PARSER = Jwts.parser().verifyWith(JWT_SECRET_KEY).build();
 
@@ -45,9 +45,9 @@ public class JwtTokenHelper implements IJwtTokenHelper {
 
     public void generateToken(Authentication authentication, Long MemberId) {
         Claims claims = Jwts.claims()
-                .add("member_id",MemberId.toString())
+                .add("member_id", MemberId.toString())
                 .build();
-        String tokenValue =Jwts.builder()
+        String tokenValue = Jwts.builder()
                 .subject(authentication.getName())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_PERIOD))
@@ -64,6 +64,7 @@ public class JwtTokenHelper implements IJwtTokenHelper {
                 .getPayload();
         return claims.getSubject();
     }
+
     public Long getMemberId() {
         Claims claims = JWT_PARSER
                 .parseSignedClaims(jwtToken.getValue())
@@ -71,29 +72,26 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         return Long.parseLong(claims.get("member_id", String.class));
     }
 
-//    public void setTokenFromRequest(HttpServletRequest request) {
-//        String bearerTokenValue = request.getHeader("Authorization");
-//        if (bearerTokenValue != null && bearerTokenValue.startsWith("Bearer ")) {
-//            jwtToken = new JwtToken(bearerTokenValue.substring(7));
-//        }
-//    }
 
     public boolean isValidToken() {
-        try{
+        try {
             JWT_PARSER.parseSignedClaims(jwtToken.getValue());
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
+
     public boolean isValidToken(JwtToken jwtTokenArg) {
-        try{
+        try {
             JWT_PARSER.parseSignedClaims(jwtTokenArg.getValue());
             return true;
-        } catch(Exception e){System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
+
     public Claims getClaims() {
         return JWT_PARSER
                 .parseSignedClaims(jwtToken.getValue())
