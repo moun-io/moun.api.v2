@@ -1,15 +1,14 @@
 package io.moun.api.auction.controller.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class AuctionRequest {
-    
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int startBid;
     private int winningBid;
     private boolean isCopyrightTransfer;

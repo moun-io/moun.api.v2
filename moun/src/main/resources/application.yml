@@ -17,12 +17,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
-
   
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: none #change to none after create once
+      ddl-auto: update #change to none after create once
     properties:
       hibernate:
         format_sql: true
@@ -35,6 +34,7 @@ spring:
       #mode:
   main:
     banner-mode: off
+    allow-bean-definition-overriding: true
 
 
 ---

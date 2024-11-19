@@ -2,7 +2,6 @@ package io.moun.api.member.infrastructure;
 
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.domain.repository.MemberRepository;
-import io.moun.api.member.domain.repository.PositionRepository;
 import io.moun.api.member.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
