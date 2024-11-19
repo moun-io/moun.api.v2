@@ -1,7 +1,10 @@
 package io.moun.api.security.infrastructure;
 
 import io.moun.api.member.controller.dto.MemberResponse;
+import io.moun.api.member.controller.mapper.MemberMapper;
 import io.moun.api.member.domain.Member;
+import io.moun.api.member.domain.repository.MemberRepository;
+import io.moun.api.member.service.MemberQueryService;
 import io.moun.api.security.controller.dto.CheckRequest;
 import io.moun.api.security.controller.dto.LoginRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
@@ -35,6 +38,9 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final IJwtTokenHelper jwtTokenHelper;
     private final ModelMapper modelMapper;
+    private final MemberQueryService memberQueryService;
+    private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper;
 
 
     @Override
@@ -60,12 +66,14 @@ public class AuthServiceImpl implements AuthService {
                             loginRequest.getUsername(),
                             loginRequest.getPassword()
                     ));
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            jwtTokenHelper.generateToken(authentication);
-            JwtToken jwtToken = jwtTokenHelper.getJwtToken();
             Auth auth = authRepository.findByUsername(loginRequest.getUsername())
-                    .orElseThrow(()-> new AuthenticationCredentialsNotFoundException(loginRequest.getUsername()));
-            MemberResponse memberResponse = modelMapper.map(auth.getMember(),MemberResponse.class);
+                    .orElseThrow(() -> new AuthenticationCredentialsNotFoundException(loginRequest.getUsername()));
+            Member member = auth.getMember();
+            jwtTokenHelper.generateToken(authentication, member.getId());
+            MemberResponse memberResponse = memberMapper.toMemberResponse(member);
+            JwtToken jwtToken = jwtTokenHelper.getJwtToken();
             return new LoginResponse(jwtToken, memberResponse);
         } catch (AuthenticationException e) {
             throw new AuthenticationCredentialsNotFoundException(loginRequest.getUsername());

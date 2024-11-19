@@ -10,5 +10,5 @@ public interface MemberCommandService {
     public Member save(Member member);
 
     public Member saveDefault();
-    public Member update(Member member);
+    public Member update(Member member,Long id);
 }
