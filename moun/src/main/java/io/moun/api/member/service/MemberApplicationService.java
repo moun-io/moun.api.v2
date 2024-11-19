@@ -1,9 +1,12 @@
 package io.moun.api.member.service;
 
+import io.moun.api.member.controller.dto.MemberResponse;
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.member.domain.Member;
 
 public interface MemberApplicationService {
-    public Member registerMemberAuth(RegisterRequest registerRequest);
-    public void deleteMemberAuth(String username);
+    public MemberResponse register(RegisterRequest registerRequest);
+    public void delete(String username);
+    public MemberResponse findWithPositionsById(Long id);
+    public MemberResponse findById(Long id);
 }

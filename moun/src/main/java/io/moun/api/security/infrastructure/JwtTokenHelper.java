@@ -73,7 +73,7 @@ public class JwtTokenHelper implements IJwtTokenHelper {
             JWT_PARSER.parseSignedClaims(jwtToken.getValue());
             return true;
         } catch(Exception e){
-            throw new ExpiredJwtException(null,null,"Your Token is invalid");
+            return false;
         }
     }
     public boolean isValidToken(JwtToken jwtTokenArg) {

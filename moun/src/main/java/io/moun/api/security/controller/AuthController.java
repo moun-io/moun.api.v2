@@ -23,13 +23,8 @@ AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-
-        JwtToken jwtToken = authService.login(loginRequest);
-        if (jwtToken != null) {
-            return ResponseEntity.ok(new LoginResponse(jwtToken));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        LoginResponse loginResponse = authService.login(loginRequest);
+        return ResponseEntity.ok(loginResponse);
 
     }
 
