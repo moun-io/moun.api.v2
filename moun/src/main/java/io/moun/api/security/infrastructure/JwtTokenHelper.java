@@ -1,10 +1,8 @@
 package io.moun.api.security.infrastructure;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import io.moun.api.security.domain.vo.JwtToken;
 import io.moun.api.security.service.IJwtTokenHelper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.crypto.SecretKey;
@@ -23,6 +22,7 @@ import java.util.Date;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class JwtTokenHelper implements IJwtTokenHelper {
     private JwtToken jwtToken;
+    private static final String TOKEN_PREFIX = "Bearer ";
     private static final int JWT_EXPIRATION_PERIOD = 40000000;
     private static final String ENV_JWT_SECRET_KEY = "your-32-characters-or-longer-secret-key";
     //            System.getenv("JWT_SECRET_KEY");
@@ -34,8 +34,10 @@ public class JwtTokenHelper implements IJwtTokenHelper {
     public JwtTokenHelper(HttpServletRequest request) {
         // setTokenFromRequest
         String bearerTokenValue = request.getHeader("Authorization");
-        if (bearerTokenValue != null && bearerTokenValue.startsWith("Bearer ")) {
-            jwtToken = new JwtToken(bearerTokenValue.substring(7));
+        if(bearerTokenValue != null&& bearerTokenValue.startsWith(TOKEN_PREFIX) ){
+            this.jwtToken = new JwtToken(bearerTokenValue.substring(TOKEN_PREFIX.length()));
+        } else {
+            this.jwtToken = null;
         }
     }
 
@@ -75,10 +77,16 @@ public class JwtTokenHelper implements IJwtTokenHelper {
 
     public boolean isValidToken() {
         try {
-            JWT_PARSER.parseSignedClaims(jwtToken.getValue());
+            JWT_PARSER.parseSignedClaims(this.jwtToken.getValue());
             return true;
-        } catch (Exception e) {
-            return false;
+        } catch (MalformedJwtException e) {
+            throw new IllegalStateException("INVALID JWT TOKEN", e);
+        } catch (ExpiredJwtException e) {
+            throw new IllegalStateException("EXPIRED_JWT TOKEN", e);
+        } catch (UnsupportedJwtException | SignatureException e) {
+            throw new IllegalStateException("UNSUPPORTED_JWT TOKEN", e);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("EMPTY", e);
         }
     }
 

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,29 +35,24 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        JwtToken jwtToken = jwtTokenHelper.getJwtToken();
-        if(jwtToken !=null && StringUtils.hasText(jwtToken.getValue()) && jwtTokenHelper.isValidToken()) {
-            try{
-                String username = jwtTokenHelper.getUsername();
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//                filterChain.doFilter(request, response);
-//                return; //without this , it responds twice
-            } catch (UsernameNotFoundException e) {
-                handleException(response,e,500,"Username Not Found Check the Database");
-            }catch (ExpiredJwtException e){
-                handleException(response,e,401,"Expired JWT Token");
-            } catch (Exception e){
-                handleException(response,e,500,"An error occurred while logging in");
-            }
+        JwtToken jwt = jwtTokenHelper.getJwtToken();
+        //anonymous User
+        if (jwt == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        // Authorized
+        if (jwtTokenHelper.isValidToken()) {
+            logger.info("jwt :" + jwt);
+            String username = jwtTokenHelper.getUsername();
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
         filterChain.doFilter(request, response);
-
-    }
-    private void handleException(HttpServletResponse response, Exception e, int statusCode, String msg) throws IOException {
-        response.setStatus(statusCode);
-        response.getWriter().write("Filter Error: " + msg + "\n" + e +  e.getMessage());
     }
 }
+
+
+
