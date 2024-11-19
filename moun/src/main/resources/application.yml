@@ -6,10 +6,10 @@ spring:
   config:
     activate:
       on-profile: local
-      
+  
   application:
     name: moun
-    
+  
   datasource:
     url: jdbc:mysql://localhost:3306/moun
     username: root
@@ -17,23 +17,24 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
-
   
   jpa:
     database: mysql
     hibernate:
       ddl-auto: update #change to none after create once
-    show-sql: true
     properties:
       hibernate:
-        format_sql: false #show jpa query log
+        format_sql: true
+        show_sql: true
     open-in-view: false
+    defer-datasource-initialization: false
   
-  sql:
-    init:
-      mode: never #after initialize hibernate, do sql query(data.sql)
+  #sql:
+    #init:
+      #mode:
   main:
     banner-mode: off
+    allow-bean-definition-overriding: true
 
 
 ---
@@ -62,3 +63,14 @@ spring:
   sql:
     init:
       mode: never
+
+--- #upload test
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      location: C:\Users\Jaero0\Desktop\uploadTest
+      max-request-size: 25MB
+      max-file-size: 20MB
+---

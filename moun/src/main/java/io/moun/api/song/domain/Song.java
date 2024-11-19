@@ -1,7 +1,8 @@
 package io.moun.api.song.domain;
 
-import io.moun.api.common.domain.BaseEntity;
+import io.moun.api.common.BaseEntity;
 import io.moun.api.auction.domain.Auction;
+import io.moun.api.common.domain.MounFile;
 import io.moun.api.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,10 +23,6 @@ public class Song extends BaseEntity {
     private String title;
     @NotNull
     private String description;
-    @NotNull
-    private String songFile;
-    @NotNull
-    private String coverImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -34,13 +31,22 @@ public class Song extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "auction_id")
     private Auction auction;
+    
+    @OneToOne
+    @JoinColumn(name = "song_file_id")
+    private MounFile songFile;
+
+    @OneToOne
+    @JoinColumn(name = "cover_image_file_id")
+    private MounFile coverImageFile;
 
     @Builder
-    public Song(Auction auction, String coverImage, String songFile, String title, String description) {
-        this.auction = auction;
-        this.coverImage = coverImage;
-        this.songFile = songFile;
+    public Song(String title, String description, Member member, Auction auction, MounFile songFile, MounFile coverImageFile) {
         this.title = title;
         this.description = description;
+        this.member = member;
+        this.auction = auction;
+        this.songFile = songFile;
+        this.coverImageFile = coverImageFile;
     }
 }

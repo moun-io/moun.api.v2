@@ -1,4 +1,4 @@
-package io.moun.api.common.domain;
+package io.moun.api.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
