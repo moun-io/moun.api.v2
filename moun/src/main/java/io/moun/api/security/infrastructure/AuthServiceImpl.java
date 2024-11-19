@@ -34,9 +34,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final IJwtTokenHelper jwtTokenHelper;
-    private final ModelMapper modelMapper;
-    private final MemberQueryService memberQueryService;
-    private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
 
