@@ -86,14 +86,5 @@ public class AuthServiceImpl implements AuthService {
         }
 
     }
-
-    @Override
-    public Auth findAuthByUsername(String username) {
-        Auth auth = authRepository.findByUsername(username).orElse(null);
-        if (auth == null) {
-            throw new AuthenticationCredentialsNotFoundException(username + "Not Found");
-        }
-        return auth;
-    }
 }
 
