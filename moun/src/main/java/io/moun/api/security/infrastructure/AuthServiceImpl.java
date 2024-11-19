@@ -5,7 +5,6 @@ import io.moun.api.member.controller.mapper.MemberMapper;
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.domain.repository.MemberRepository;
 import io.moun.api.member.service.MemberQueryService;
-import io.moun.api.security.controller.dto.CheckRequest;
 import io.moun.api.security.controller.dto.LoginRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.security.controller.dto.LoginResponse;
@@ -19,7 +18,6 @@ import io.moun.api.security.service.IJwtTokenHelper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -81,8 +79,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void check(CheckRequest checkRequest) {
-        boolean isValid = jwtTokenHelper.isValidToken(checkRequest.getJwtToken());
+    public void check() {
+        boolean isValid = jwtTokenHelper.isValidToken();
         if (!isValid) {
             throw new AuthenticationCredentialsNotFoundException("Invalid token");
         }
