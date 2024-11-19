@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f35a0cc7-8115-4fef-bf09-bbe98cf03775" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/auction/Auction.java" beforeDir="false" afterPath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/auction/domain/Auction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/member/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/member/domain/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/memberauction/MemberAuctionRelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/memberauction/MemberAuctionRelation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/song/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/song/domain/Song.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/songgenre/SongGenreRelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/songgenre/SongGenreRelation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/songvibe/SongVibeRelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/moun/src/main/java/io/moun/api/songvibe/SongVibeRelation.java" afterDir="false" />
-    </list>
+    <list default="true" id="f35a0cc7-8115-4fef-bf09-bbe98cf03775" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,7 +76,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.MounApplication.executor": "Debug",
-    "git-widget-placeholder": "setting",
+    "git-widget-placeholder": "authentication",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Jaero0/Desktop/moun.back",
     "node.js.detected.package.eslint": "true",
@@ -120,8 +112,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -141,6 +133,7 @@
       <workItem from="1731056874892" duration="5043000" />
       <workItem from="1731173276524" duration="222000" />
       <workItem from="1731232131203" duration="3519000" />
+      <workItem from="1731597760112" duration="13000" />
     </task>
     <servers />
   </component>

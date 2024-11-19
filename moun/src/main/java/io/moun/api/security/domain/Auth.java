@@ -1,5 +1,6 @@
 package io.moun.api.security.domain;
 
+import io.moun.api.member.domain.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,11 +14,16 @@ import java.util.List;
 @Setter
 @Table(name = "users")
 public class Auth {
+
+
     @Id
     @NotNull
     private String username;
     @NotNull
     private String password;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private Member member;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "username")

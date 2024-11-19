@@ -1,6 +1,6 @@
 package io.moun.api.controller;
 
-import io.moun.api.security.controller.dto.RegisterRequest;
+import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.security.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
