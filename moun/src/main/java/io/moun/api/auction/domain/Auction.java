@@ -23,9 +23,9 @@ public class Auction {
     private LocalDateTime endTime;
     
     @NotNull
-    private int startBid;
+    private int startBidAmount;
     @NotNull
-    private int winningBid;
+    private int winningBidAmount;
     
     @NotNull
     private boolean isCopyrightTransfer;
