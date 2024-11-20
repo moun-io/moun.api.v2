@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SNS {
-    private String instagramSNS;
-    private String soundCloudSNS;
+    private String instagramUrl;
+    private String soundCloudUrl;
 
     @Builder
     public SNS(String instagramSNS, String soundCloudSNS) {
-        this.instagramSNS = instagramSNS;
-        this.soundCloudSNS = soundCloudSNS;
+        this.instagramUrl = instagramSNS;
+        this.soundCloudUrl = soundCloudSNS;
     }
 }

@@ -6,5 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum GenreType {
-    IDOL
+    IDOL,
+    HIPHOP,
+    BALLAD,
+    UK_GARAGE
 }
