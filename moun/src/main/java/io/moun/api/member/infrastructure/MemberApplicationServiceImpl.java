@@ -13,10 +13,7 @@ import io.moun.api.security.infrastructure.JwtTokenHelper;
 import io.moun.api.security.service.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -52,6 +49,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
         return memberMapper.toMemberResponse(savedMember);
     }
 
+    @Transactional
     public MemberResponse update(MemberUpdateRequest memberUpdateRequest, Long id) {
         Member member = memberMapper.toMember(memberUpdateRequest);
         memberCommandService.update(member, id);
