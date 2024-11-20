@@ -16,14 +16,12 @@ import io.moun.api.song.domain.Song;
 import io.moun.api.song.domain.SongRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +29,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SongService {
 
-    private final ModelMapper modelMapper;
     private final SongRepository songRepository;
     private final AuctionRepository auctionRepository;
     private final MemberQueryService memberQueryService;
