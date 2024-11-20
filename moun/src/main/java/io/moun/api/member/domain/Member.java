@@ -1,5 +1,6 @@
 package io.moun.api.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.moun.api.common.BaseEntity;
 import io.moun.api.security.domain.Auth;
 import io.moun.api.song.domain.Song;
@@ -31,6 +32,7 @@ public class Member extends BaseEntity {
     private boolean verified;
     private String profilePictureUrl;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Position> positions = new ArrayList<>();
     
     public void addPosition(Position position) {
