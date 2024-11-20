@@ -32,10 +32,8 @@ public class Member extends BaseEntity {
     private String profilePictureUrl;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Position> positions = new ArrayList<>();
-
-
-
-    public void addPosition (Position position){
+    
+    public void addPosition(Position position) {
         positions.add(position);
     }
 }

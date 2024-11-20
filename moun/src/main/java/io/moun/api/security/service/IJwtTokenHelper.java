@@ -6,17 +6,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
 public interface IJwtTokenHelper {
-    public JwtToken getJwtToken();
+    JwtToken getJwtToken();
 
-    public void generateToken(Authentication authentication,Long memberId);
+    void generateToken(Authentication authentication,Long memberId);
 
-    public String getUsername();
+    String getUsername();
 
-    public boolean isValidToken();
+    boolean isValidToken();
 
-    public boolean isValidToken(JwtToken jwtTokenArg);
+    boolean isValidToken(JwtToken jwtTokenArg);
 
-    public Claims getClaims();
+    Claims getClaims();
+    void setJwtToken(JwtToken token);
 
-    public Long getMemberId();
+    Long getMemberId();
 }
