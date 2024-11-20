@@ -87,15 +87,6 @@ public class JwtTokenHelper implements IJwtTokenHelper {
         }
     }
 
-    public boolean isValidToken(JwtToken jwtTokenArg) {
-        try {
-            JWT_PARSER.parseSignedClaims(jwtTokenArg.getValue());
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
 
     public Claims getClaims() {
         return JWT_PARSER

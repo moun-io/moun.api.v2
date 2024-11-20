@@ -26,11 +26,6 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final JwtTokenHelper jwtTokenHelper;
 
 
-    public Member findByUsername(String username) {
-        Auth auth = authService.findAuthByUsername(username);
-        return auth.getMember();
-    }
-
     @Override
     public MemberResponse findById(Long id) {
         return memberMapper.toMemberResponse(memberQueryService.findById(id));

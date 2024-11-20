@@ -14,9 +14,8 @@ public interface IJwtTokenHelper {
 
     boolean isValidToken();
 
-    boolean isValidToken(JwtToken jwtTokenArg);
-
     Claims getClaims();
+
     void setJwtToken(JwtToken token);
 
     Long getMemberId();

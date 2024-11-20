@@ -34,9 +34,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final IJwtTokenHelper jwtTokenHelper;
-    private final ModelMapper modelMapper;
-    private final MemberQueryService memberQueryService;
-    private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
 
@@ -85,15 +82,6 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthenticationCredentialsNotFoundException("Invalid token");
         }
 
-    }
-
-    @Override
-    public Auth findAuthByUsername(String username) {
-        Auth auth = authRepository.findByUsername(username).orElse(null);
-        if (auth == null) {
-            throw new AuthenticationCredentialsNotFoundException(username + "Not Found");
-        }
-        return auth;
     }
 }
 
