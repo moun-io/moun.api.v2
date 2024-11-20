@@ -40,14 +40,15 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 //Authorization
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/check").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/members").permitAll()// you don't need to put context-path here
                         .requestMatchers(HttpMethod.GET, "/members/**").permitAll()// you don't need to put context-path here
+                        .requestMatchers(HttpMethod.GET ,"/songs/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }
