@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +33,6 @@ public class SongService {
     private final AuctionRepository auctionRepository;
     private final MemberQueryService memberQueryService;
     private final MounFileService mounFileService;
-    private final StringHttpMessageConverter stringHttpMessageConverter;
     private final JwtTokenHelper jwtTokenHelper;
 
     //music upload api1
@@ -137,7 +135,7 @@ public class SongService {
         return mounFileService.LOCAL_UPLOAD_DIR + "/" + fileName;
     }
 
-    //get songs list
+    //get songs list method
     private List<SongResponse> getSongResponses(List<Song> songList) {
 
         List<SongResponse> songResponseList;
