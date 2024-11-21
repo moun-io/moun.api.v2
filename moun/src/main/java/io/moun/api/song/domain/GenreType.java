@@ -1,4 +1,4 @@
-package io.moun.api.genre;
+package io.moun.api.song.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum GenreType {
     IDOL,
+    POP,
+    INDIE,
     HIPHOP,
     BALLAD,
     UK_GARAGE

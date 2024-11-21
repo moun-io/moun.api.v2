@@ -36,9 +36,9 @@ public class SongService {
     private final StringHttpMessageConverter stringHttpMessageConverter;
     private final JwtTokenHelper jwtTokenHelper;
 
+    //music upload api1
     @Transactional
-    public ResponseEntity<MounFileUploadResponse> uploadSongRelatedFiles(MultipartFile songFile,
-                                                         MultipartFile coverFile) {
+    public ResponseEntity<MounFileUploadResponse> uploadSongRelatedFiles(MultipartFile songFile, MultipartFile coverFile) {
 
         MounFile songUpload = mounFileService.uploadFileToLocalAndSave(songFile);
         MounFile coverUpload = mounFileService.uploadFileToLocalAndSave(coverFile);
@@ -53,12 +53,13 @@ public class SongService {
         return ResponseEntity.status(HttpStatus.CREATED).body(mfup);
     }
 
+    //music upload api2
     @Transactional
     public ResponseEntity<Song> uploadSongAndAuction(SongAuctionVO songAuctionVO) {
 
         Long memberId = jwtTokenHelper.getMemberId();
 
-        Member member = memberQueryService.findById(memberId);
+        Member member = memberQueryService.findWithPositionsById(memberId);
 
         AuctionRequest auctionRequest = songAuctionVO.getAuctionRequest();
         auctionRequest.setExpired(false);
@@ -83,6 +84,8 @@ public class SongService {
                 .coverImageFile(coverFile)
                 .title(songRequest.getTitle())
                 .description(songRequest.getDescription())
+                .songGenres(songRequest.getSongGenres())
+                .songVibes(songRequest.getSongVibes())
                 .build();
 
         //save into repository
@@ -91,35 +94,71 @@ public class SongService {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSong);
     }
-    
-    
+
+    //find all songs by member id api
     public ResponseEntity<List<SongResponse>> findAllSongByMemberId(Long id) {
-        
-        Member member = memberQueryService.findById(id);
-        
+
+        Member member = memberQueryService.findWithPositionsById(id);
+
         List<Song> songsByMember = songRepository.findAllByMember(member);
 
         List<SongResponse> songResponseList = null;
         try {
-            songResponseList = songsByMember.stream()
-                    .map(song -> {
-                        String songFileDir = mounFileService.LOCAL_UPLOAD_DIR + "/" + song.getSongFile().getFileName();
-                        String coverFileDir = mounFileService.LOCAL_UPLOAD_DIR + "/" + song.getCoverImageFile().getFileName();
+            songResponseList = getSongResponses(songsByMember);
 
-                        return SongResponse.builder()
-                            .id(song.getId())
-                            .title(song.getTitle())
-                            .description(song.getDescription())
-                            .member(member)
-                            .auction(song.getAuction())
-                            .songUrl(songFileDir)
-                            .coverUrl(coverFileDir)
-                            .build();})
-                    .collect(Collectors.toList());
         } catch (Exception e) {
-            throw new RuntimeException("TQQQQQQQQQQQQQQQQ");
+            throw new RuntimeException("ERRORRORROR");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(songResponseList);
+    }
+
+    //find all songs api
+    public ResponseEntity<List<SongResponse>> findAllSongs() {
+
+        List<Song> all = songRepository.findAll();
+
+        List<SongResponse> songResponseList = null;
+        try {
+            songResponseList = getSongResponses(all);
+        } catch (Exception e) {
+            throw new RuntimeException("ERRORRORROR");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(songResponseList);
+    }
+
+
+
+
+    //make file local direction to string method
+    private String makeFileDir(String fileName) {
+        return mounFileService.LOCAL_UPLOAD_DIR + "/" + fileName;
+    }
+
+    //get songs list
+    private List<SongResponse> getSongResponses(List<Song> songList) {
+
+        List<SongResponse> songResponseList;
+        songResponseList = songList.stream()
+                .map(song -> {
+                    String songFileDir = makeFileDir(song.getSongFile().getFileName());
+                    String coverFileDir = makeFileDir(song.getSongFile().getFileName());
+
+                    return SongResponse.builder()
+                            .id(song.getId())
+                            .title(song.getTitle())
+                            .description(song.getDescription())
+                            .songVibes(song.getSongVibes())
+                            .songGenres(song.getSongGenres())
+                            .member(song.getMember())
+                            .auction(song.getAuction())
+                            .songUrl(songFileDir)
+                            .coverUrl(coverFileDir)
+                            .createdDate(song.getCreatedDate())
+                            .lastModifiedDate(song.getLastModifiedDate())
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return songResponseList;
     }
 }
