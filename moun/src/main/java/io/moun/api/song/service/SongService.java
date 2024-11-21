@@ -111,6 +111,10 @@ public class SongService {
     //find all songs by member id / api
     public ResponseEntity<List<LinkedMultiValueMap<String, Object>>> findAllSongByMemberId(Long id) {
 
+
+        //파일을 response에 넣어야하는데, 그 resource까지는 잘 들어감.
+        //근데 return하는 곳에서 익셉션 납치...
+        //todo
         Member member = memberQueryService.findById(id);
 
         List<Song> songsByMember = songRepository.findAllByMember(member);
