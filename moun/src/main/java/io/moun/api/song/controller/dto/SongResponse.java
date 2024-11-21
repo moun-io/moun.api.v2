@@ -27,12 +27,8 @@ public class SongResponse extends BaseEntityResponse {
 
     private Auction auction;
 
-    private String songUrl;
-
-    private String coverUrl;
-
     @Builder
-    public SongResponse(LocalDateTime createdDate, LocalDateTime lastModifiedDate, Long id, String title, String description, Set<GenreType> songGenres, Set<VibeType> songVibes, Long memberId, Auction auction, String songUrl, String coverUrl) {
+    public SongResponse(LocalDateTime createdDate, LocalDateTime lastModifiedDate, Long id, String title, String description, Set<GenreType> songGenres, Set<VibeType> songVibes, Long memberId, Auction auction) {
         super(createdDate, lastModifiedDate);
         this.id = id;
         this.title = title;
@@ -41,8 +37,6 @@ public class SongResponse extends BaseEntityResponse {
         this.songVibes = songVibes;
         this.memberId = memberId;
         this.auction = auction;
-        this.songUrl = songUrl;
-        this.coverUrl = coverUrl;
     }
 
 

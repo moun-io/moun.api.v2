@@ -16,6 +16,7 @@ public class MounFileService {
 
     @Value("${spring.servlet.multipart.location}")
     public String LOCAL_UPLOAD_DIR;
+    private static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
 
     private final MounFileRepository mounFileRepository;
 
