@@ -14,7 +14,7 @@ import io.moun.api.song.controller.dto.SongRequest;
 import io.moun.api.song.controller.dto.SongResponse;
 import io.moun.api.song.domain.Song;
 import io.moun.api.song.domain.SongRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SongService {
 
     private final SongRepository songRepository;
@@ -59,7 +60,7 @@ public class SongService {
 
         Long memberId = jwtTokenHelper.getMemberId();
 
-        Member member = memberQueryService.findWithPositionsById(memberId);
+        Member member = memberQueryService.findById(memberId);
 
         AuctionRequest auctionRequest = songAuctionVO.getAuctionRequest();
         auctionRequest.setExpired(false);
@@ -98,9 +99,10 @@ public class SongService {
     //find all songs by member id api
     public ResponseEntity<List<SongResponse>> findAllSongByMemberId(Long id) {
 
-        Member member = memberQueryService.findWithPositionsById(id);
+        Member member = memberQueryService.findById(id);
 
         List<Song> songsByMember = songRepository.findAllByMember(member);
+        //List<Song> allByMemberId = songRepository.findSongsByMember_Id(id);
 
         List<SongResponse> songResponseList = null;
         try {
@@ -150,7 +152,7 @@ public class SongService {
                             .description(song.getDescription())
                             .songVibes(song.getSongVibes())
                             .songGenres(song.getSongGenres())
-                            .member(song.getMember())
+                            .memberId(song.getMember().getId())
                             .auction(song.getAuction())
                             .songUrl(songFileDir)
                             .coverUrl(coverFileDir)
