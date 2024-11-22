@@ -13,6 +13,4 @@ public class SongRequest {
     private String description;
     private Set<GenreType> songGenres;
     private Set<VibeType> songVibes;
-    private Long songFileId;
-    private Long coverFileId;
 }

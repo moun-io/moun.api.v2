@@ -1,6 +1,5 @@
 package io.moun.api.song.controller;
 
-import io.moun.api.common.controller.dto.MounFileUploadResponse;
 import io.moun.api.song.controller.dto.SongAuctionVO;
 import io.moun.api.song.controller.dto.SongResponse;
 import io.moun.api.song.domain.Song;
@@ -8,6 +7,7 @@ import io.moun.api.song.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +24,14 @@ public class SongController {
 
     private final SongService songService;
 
-    @PostMapping("/songs/files") //upload - create
-    public ResponseEntity<MounFileUploadResponse> uploadSongFiles(
+    @PatchMapping("/songs/{id}/files") //upload - update
+    public ResponseEntity<SongResponse> uploadSongFiles(
+            @PathVariable Long id,
             @RequestPart(value = "song-file") MultipartFile songFile,
             @RequestPart(value = "cover-file") MultipartFile coverFile
     ) {
 
-        return songService.uploadSongRelatedFiles(songFile, coverFile);
+        return songService.uploadSongRelatedFiles(id, songFile, coverFile);
     }
 
     @PostMapping("/songs") //make song entity - create

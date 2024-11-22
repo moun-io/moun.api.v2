@@ -21,12 +21,14 @@ public class MounFile {
     @NotNull
     private String fileName;
 
+    private String generatedFileName;
     private String contentType;
     private String filePath;
 
     @Builder
-    public MounFile(String fileName, String contentType, String filePath) {
+    public MounFile(String fileName, String generatedFileName, String contentType, String filePath) {
         this.fileName = fileName;
+        this.generatedFileName = generatedFileName;
         this.contentType = contentType;
         this.filePath = filePath;
     }

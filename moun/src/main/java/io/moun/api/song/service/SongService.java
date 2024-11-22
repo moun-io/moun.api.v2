@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.moun.api.auction.controller.dto.AuctionRequest;
 import io.moun.api.auction.domain.Auction;
 import io.moun.api.auction.domain.AuctionRepository;
-import io.moun.api.common.controller.dto.MounFileUploadResponse;
 import io.moun.api.common.domain.MounFile;
 import io.moun.api.common.service.MounFileService;
 import io.moun.api.member.domain.Member;
@@ -16,6 +15,7 @@ import io.moun.api.song.controller.dto.SongResponse;
 import io.moun.api.song.domain.Song;
 import io.moun.api.song.domain.SongRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,19 +42,29 @@ public class SongService {
 
     //music upload - file / api1
     @Transactional
-    public ResponseEntity<MounFileUploadResponse> uploadSongRelatedFiles(MultipartFile songFile, MultipartFile coverFile) {
+    public ResponseEntity<SongResponse> uploadSongRelatedFiles(Long id, MultipartFile songFile, MultipartFile coverFile) {
 
         MounFile songUpload = mounFileService.uploadFileToLocalAndSave(songFile);
         MounFile coverUpload = mounFileService.uploadFileToLocalAndSave(coverFile);
 
-        MounFileUploadResponse mfup = new MounFileUploadResponse(
-                songUpload.getId(),
-                songUpload.getFileName(),
-                coverUpload.getId(),
-                coverUpload.getFileName()
-        );
+        Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(mfup);
+        song.update(songUpload, coverUpload);
+
+        SongResponse build = SongResponse.builder()
+                .id(song.getId())
+                .title(song.getTitle())
+                .description(song.getDescription())
+                .songVibes(song.getSongVibes())
+                .songGenres(song.getSongGenres())
+                .songFileURL(songUpload.getFilePath())
+                .coverFileURL(coverUpload.getFilePath())
+                .auction(song.getAuction())
+                .createdDate(song.getCreatedDate())
+                .lastModifiedDate(song.getLastModifiedDate())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(build);
     }
 
     //music upload - dto / api2
@@ -68,9 +78,6 @@ public class SongService {
         AuctionRequest auctionRequest = songAuctionVO.getAuctionRequest();
         auctionRequest.setExpired(false);
         SongRequest songRequest = songAuctionVO.getSongRequest();
-
-        MounFile songFile = mounFileService.getMounFileById(songRequest.getSongFileId());
-        MounFile coverFile = mounFileService.getMounFileById(songRequest.getCoverFileId());
 
         //if start date is later than end date, also start bid is smaller than winning bid, return 400 / null
         if (Duration.between(auctionRequest.getStartDate().atStartOfDay(), auctionRequest.getEndDate().atStartOfDay()).toDays() <= 0
@@ -89,8 +96,6 @@ public class SongService {
         Song buildSong = Song.builder()
                 .member(member)
                 .auction(buildAuction)
-                .songFile(songFile)
-                .coverImageFile(coverFile)
                 .title(songRequest.getTitle())
                 .description(songRequest.getDescription())
                 .songGenres(songRequest.getSongGenres())
@@ -131,11 +136,15 @@ public class SongService {
         Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
 
         MounFile songFile = song.getSongFile();
-        byte[] bytes = mounFileService.downloadFileFromLocal(songFile.getFileName());
+        byte[] bytes = mounFileService.downloadFileFromLocal(songFile.getGeneratedFileName());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; " + songFile.getFileName());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.valueOf(songFile.getContentType()))
+                .headers(headers)
                 .body(bytes);
     }
 
@@ -145,11 +154,15 @@ public class SongService {
         Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
 
         MounFile coverImageFile = song.getCoverImageFile();
-        byte[] bytes = mounFileService.downloadFileFromLocal(coverImageFile.getFileName());
+        byte[] bytes = mounFileService.downloadFileFromLocal(coverImageFile.getGeneratedFileName());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; " + coverImageFile.getFileName());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.valueOf(coverImageFile.getContentType()))
+                .headers(headers)
                 .body(bytes);
     }
 
@@ -171,8 +184,8 @@ public class SongService {
                     .description(song.getDescription())
                     .songGenres(song.getSongGenres())
                     .songVibes(song.getSongVibes())
-                    .songFileURL(getURL + songName)
-                    .coverFileURL(getURL + coverName)
+                    .songFileURL(getURL + "audio")
+                    .coverFileURL(getURL + "image")
                     .createdDate(song.getCreatedDate())
                     .lastModifiedDate(song.getLastModifiedDate())
                     .memberId(song.getMember().getId())

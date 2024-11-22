@@ -34,7 +34,8 @@ public class MounFileService {
             file.transferTo(new File(path));
             
             MounFile uploadedFile = MounFile.builder()
-                    .fileName(fileName)
+                    .fileName(file.getOriginalFilename())
+                    .generatedFileName(fileName)
                     .contentType(file.getContentType())
                     .filePath(path)
                     .build();
@@ -77,7 +78,7 @@ public class MounFileService {
     }
 
     public MounFile getMounFileByFileName(String fileName) {
-        return mounFileRepository.findMounFileByFileName(fileName).orElseThrow(
+        return mounFileRepository.findMounFileByGeneratedFileName(fileName).orElseThrow(
                 () -> new RuntimeException("Id not founded"));
     }
     

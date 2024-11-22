@@ -69,13 +69,16 @@ public class Song extends BaseEntity {
     private MounFile coverImageFile;
 
     @Builder
-    public Song(String title, String description, Set<GenreType> songGenres, Set<VibeType> songVibes,  Member member, Auction auction, MounFile songFile, MounFile coverImageFile) {
+    public Song(String title, String description, Set<GenreType> songGenres, Set<VibeType> songVibes,  Member member, Auction auction) {
         this.title = title;
         this.description = description;
         this.songGenres = songGenres;
         this.songVibes = songVibes;
         this.member = member;
         this.auction = auction;
+    }
+
+    public void update(MounFile songFile, MounFile coverImageFile) {
         this.songFile = songFile;
         this.coverImageFile = coverImageFile;
     }

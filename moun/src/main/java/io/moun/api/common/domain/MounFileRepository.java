@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface MounFileRepository extends JpaRepository<MounFile, Long> {
     Optional<MounFile> findMounFileById(Long id);
 
-    Optional<MounFile> findMounFileByFileName(String fileName);
+    Optional<MounFile> findMounFileByGeneratedFileName(String generatedFileName);
 }
