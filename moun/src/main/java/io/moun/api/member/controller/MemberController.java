@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/members")
@@ -33,8 +34,9 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getMembers() {
-        return ResponseEntity.ok("Members");
+    public ResponseEntity<List<MemberResponse>> getMembers() {
+        List<MemberResponse> memberResponses=  memberApplicationService.findAllWithPositions();
+        return ResponseEntity.ok(memberResponses);
     }
 
     @GetMapping("/{id}")

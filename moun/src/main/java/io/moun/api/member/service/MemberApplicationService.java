@@ -5,8 +5,12 @@ import io.moun.api.member.controller.dto.MemberUpdateRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.member.domain.Member;
 
+import java.util.List;
+
 public interface MemberApplicationService {
     MemberResponse register(RegisterRequest registerRequest);
+
+    List<MemberResponse> findAllWithPositions();
 
     void delete(String username);
 

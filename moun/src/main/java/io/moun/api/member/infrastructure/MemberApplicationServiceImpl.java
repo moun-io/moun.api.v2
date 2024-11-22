@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,12 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     public MemberResponse findById(Long id) {
         return memberMapper.toMemberResponse(memberQueryService.findById(id));
     }
+    public List<MemberResponse> findAllWithPositions() {
+        return memberQueryService.findAllWithPositions().stream()
+                .map(member -> memberMapper.toMemberResponse(member))
+                .collect(Collectors.toList());
+    }
+
 
     public MemberResponse findWithPositionsById(Long id) {
         return memberMapper.toMemberResponse(memberQueryService.findWithPositionsById(id));

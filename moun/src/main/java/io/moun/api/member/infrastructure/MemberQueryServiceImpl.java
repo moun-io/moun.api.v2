@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberQueryServiceImpl implements MemberQueryService {
@@ -18,6 +20,11 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+    }
+
+    @Override
+    public List<Member> findAllWithPositions() {
+        return memberRepository.findAllWithPositions();
     }
 
     public Member findWithPositionsById(Long id) {
