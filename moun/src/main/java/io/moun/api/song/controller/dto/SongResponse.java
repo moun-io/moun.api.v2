@@ -23,18 +23,24 @@ public class SongResponse extends BaseEntityResponse {
 
     private Set<VibeType> songVibes;
 
+    private String songFileURL;
+
+    private String coverFileURL;
+
     private Long memberId;
 
     private Auction auction;
 
     @Builder
-    public SongResponse(LocalDateTime createdDate, LocalDateTime lastModifiedDate, Long id, String title, String description, Set<GenreType> songGenres, Set<VibeType> songVibes, Long memberId, Auction auction) {
+    public SongResponse(LocalDateTime createdDate, LocalDateTime lastModifiedDate, Long id, String title, String description, Set<GenreType> songGenres, Set<VibeType> songVibes, String songFileURL, String coverFileURL, Long memberId, Auction auction) {
         super(createdDate, lastModifiedDate);
         this.id = id;
         this.title = title;
         this.description = description;
         this.songGenres = songGenres;
         this.songVibes = songVibes;
+        this.songFileURL = songFileURL;
+        this.coverFileURL = coverFileURL;
         this.memberId = memberId;
         this.auction = auction;
     }

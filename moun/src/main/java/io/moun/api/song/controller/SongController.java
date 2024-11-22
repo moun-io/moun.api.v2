@@ -2,11 +2,11 @@ package io.moun.api.song.controller;
 
 import io.moun.api.common.controller.dto.MounFileUploadResponse;
 import io.moun.api.song.controller.dto.SongAuctionVO;
+import io.moun.api.song.controller.dto.SongResponse;
 import io.moun.api.song.domain.Song;
 import io.moun.api.song.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class SongController {
 
     private final SongService songService;
 
-    @PostMapping("/songs/files") //Create
+    @PostMapping("/songs/files") //upload - create
     public ResponseEntity<MounFileUploadResponse> uploadSongFiles(
             @RequestPart(value = "song-file") MultipartFile songFile,
             @RequestPart(value = "cover-file") MultipartFile coverFile
@@ -32,21 +33,31 @@ public class SongController {
         return songService.uploadSongRelatedFiles(songFile, coverFile);
     }
 
-    @PostMapping("/songs") //Create
+    @PostMapping("/songs") //make song entity - create
     public ResponseEntity<Song> createSongAndAuction(@RequestBody SongAuctionVO songAuctionVO) {
 
 
         return songService.uploadSongAndAuction(songAuctionVO);
     }
 
-    @GetMapping("/songs/{id}") //Read
-    public ResponseEntity<List<LinkedMultiValueMap<String, Object>>> getSongInformation(@PathVariable Long id) {
+    @GetMapping("/songs/members/{id}") //find songs by member id - read
+    public ResponseEntity<List<SongResponse>> getSongInformationByMember(@PathVariable Long id) {
 
         return songService.findAllSongByMemberId(id);
     }
 
-    @GetMapping("/songs") //Read
-    public ResponseEntity<List<LinkedMultiValueMap<String, Object>>> getAllSongs() {
+    @GetMapping("/songs") //find all songs - read
+    public ResponseEntity<List<SongResponse>> getAllSongs() {
         return songService.findAllSongs();
+    }
+
+    @GetMapping("/songs/{id}/audio") //download song file - read
+    public ResponseEntity<byte[]> downloadSongFileBySongId(@PathVariable Long id) throws IOException {
+        return songService.downloadSongFileBySongId(id);
+    }
+
+    @GetMapping("/songs/{id}/image") //download image file - read
+    public ResponseEntity<byte[]> downloadImageFileBySongId(@PathVariable Long id) throws IOException {
+        return songService.downloadImageFileBySongId(id);
     }
 }

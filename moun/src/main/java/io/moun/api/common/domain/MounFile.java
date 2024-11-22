@@ -21,8 +21,13 @@ public class MounFile {
     @NotNull
     private String fileName;
 
+    private String contentType;
+    private String filePath;
+
     @Builder
-    public MounFile(String fileName) {
+    public MounFile(String fileName, String contentType, String filePath) {
         this.fileName = fileName;
+        this.contentType = contentType;
+        this.filePath = filePath;
     }
 }

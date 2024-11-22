@@ -1,6 +1,5 @@
 package io.moun.api.song.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.moun.api.auction.controller.dto.AuctionRequest;
 import io.moun.api.auction.domain.Auction;
@@ -17,21 +16,17 @@ import io.moun.api.song.controller.dto.SongResponse;
 import io.moun.api.song.domain.Song;
 import io.moun.api.song.domain.SongRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.MalformedURLException;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -109,99 +104,84 @@ public class SongService {
     }
 
     //find all songs by member id / api
-    public ResponseEntity<List<LinkedMultiValueMap<String, Object>>> findAllSongByMemberId(Long id) {
+    public ResponseEntity<List<SongResponse>> findAllSongByMemberId(Long id) {
 
-
-        //파일을 response에 넣어야하는데, 그 resource까지는 잘 들어감.
-        //근데 return하는 곳에서 익셉션 납치...
-        //todo
         Member member = memberQueryService.findById(id);
 
         List<Song> songsByMember = songRepository.findAllByMember(member);
 
-        List<LinkedMultiValueMap<String, Object>> songResponseList = null;
-        try {
-            songResponseList = getSongResponses(songsByMember);
+        List<SongResponse> songResponseList = getSongResponses(songsByMember);
 
-        } catch (Exception e) {
-            throw new RuntimeException("ERRORRORROR");
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, "multipart/form-data");
-
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(songResponseList);
+        return ResponseEntity.status(HttpStatus.OK).body(songResponseList);
     }
 
     //find all songs / api
-    public ResponseEntity<List<LinkedMultiValueMap<String, Object>>> findAllSongs() {
+    public ResponseEntity<List<SongResponse>> findAllSongs() {
 
         List<Song> all = songRepository.findAll();
 
-        List<LinkedMultiValueMap<String, Object>> songResponses = getSongResponses(all);
+        List<SongResponse> songResponseList = getSongResponses(all);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, "multipart/form-data");
+        return ResponseEntity.status(HttpStatus.OK).body(songResponseList);
+    }
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(songResponses);
+    //get audio multifile
+    public ResponseEntity<byte[]> downloadSongFileBySongId(Long id) throws IOException {
+
+        Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
+
+        MounFile songFile = song.getSongFile();
+        byte[] bytes = mounFileService.downloadFileFromLocal(songFile.getFileName());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(songFile.getContentType()))
+                .body(bytes);
+    }
+
+    //get image multifile
+    public ResponseEntity<byte[]> downloadImageFileBySongId(Long id) throws IOException {
+
+        Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
+
+        MounFile coverImageFile = song.getCoverImageFile();
+        byte[] bytes = mounFileService.downloadFileFromLocal(coverImageFile.getFileName());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(coverImageFile.getContentType()))
+                .body(bytes);
     }
 
 
-
-
-    //make file local direction to string / method
-    private String makeFileDir(String fileName) {
-        return mounFileService.LOCAL_UPLOAD_DIR + "/" + fileName;
-    }
 
     //get songs list / method
-    private List<LinkedMultiValueMap<String, Object>> getSongResponses(List<Song> songList) {
+    private List<SongResponse> getSongResponses(List<Song> songList) {
 
-        List<LinkedMultiValueMap<String, Object>> songResponseList;
+        String getURL = "GET /api/songs/{id}/";
+        List<SongResponse> responses = new ArrayList<>();
 
-        songResponseList = songList.stream()
-                .map(song -> {
-                    String songFileDir = makeFileDir(song.getSongFile().getFileName());
-                    String coverFileDir = makeFileDir(song.getSongFile().getFileName());
+        for (Song song : songList) {
+            String songName = song.getSongFile().getFileName();
+            String coverName = song.getCoverImageFile().getFileName();
 
-                    SongResponse build = SongResponse.builder()
-                            .id(song.getId())
-                            .title(song.getTitle())
-                            .description(song.getDescription())
-                            .songVibes(song.getSongVibes())
-                            .songGenres(song.getSongGenres())
-                            .memberId(song.getMember().getId())
-                            .auction(song.getAuction())
-                            .createdDate(song.getCreatedDate())
-                            .lastModifiedDate(song.getLastModifiedDate())
-                            .build();
+            SongResponse build = SongResponse.builder()
+                    .id(song.getId())
+                    .title(song.getTitle())
+                    .description(song.getDescription())
+                    .songGenres(song.getSongGenres())
+                    .songVibes(song.getSongVibes())
+                    .songFileURL(getURL + songName)
+                    .coverFileURL(getURL + coverName)
+                    .createdDate(song.getCreatedDate())
+                    .lastModifiedDate(song.getLastModifiedDate())
+                    .memberId(song.getMember().getId())
+                    .auction(song.getAuction())
+                    .build();
 
-                    Resource songRes = null;
-                    Resource coverRes = null;
-                    String meta = null;
-                    try {
-                        songRes = new UrlResource(Paths.get(songFileDir).toUri());
-                        coverRes = new UrlResource(Paths.get(coverFileDir).toUri());
+            responses.add(build);
+        }
 
-                        meta = objectMapper.writeValueAsString(build);
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-                    map.add("audio", songRes);
-                    map.add("image", coverRes);
-
-
-
-                    map.add("metadata", meta);
-
-                    return map;
-                })
-                .collect(Collectors.toList());
-
-        return songResponseList;
+        return responses;
     }
 }
