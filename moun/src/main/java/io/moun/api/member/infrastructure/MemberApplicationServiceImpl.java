@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +29,17 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final MemberCommandService memberCommandService;
     private final AuthService authService;
     private final MemberMapper memberMapper;
-    private final JwtTokenHelper jwtTokenHelper;
 
 
     public Member findByUsername(String username) {
         Auth auth = authService.findAuthByUsername(username);
         return auth.getMember();
+    }
+
+    public List<MemberResponse> findAllWithPositions() {
+        return memberQueryService.findAllWithPositions().stream()
+                .map(member -> memberMapper.toMemberResponse(member))
+                .collect(Collectors.toList());
     }
 
     @Override
