@@ -1,13 +1,15 @@
 package io.moun.api.member.domain;
 
-import io.moun.api.common.domain.BaseEntity;
-import io.moun.api.member.controller.dto.MemberResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.moun.api.common.BaseEntity;
+import io.moun.api.security.domain.Auth;
 import io.moun.api.song.domain.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,10 @@ public class Member extends BaseEntity {
     private boolean verified;
     private String profilePictureUrl;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Position> positions = new ArrayList<>();
-
-
-
-    public void addPosition (Position position){
+    
+    public void addPosition(Position position) {
         positions.add(position);
     }
-
-
 }

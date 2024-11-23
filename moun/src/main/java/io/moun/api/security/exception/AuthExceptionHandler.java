@@ -19,27 +19,26 @@ public class AuthExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(AuthExceptionHandler.class);
 
 
-//    @ExceptionHandler(Exception.class)
-    public void authenticationExceptionHandler(final Exception e) {
-        logger.info(e.getMessage());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Authentication failed : Bad Request");
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> illegalStateException(final IllegalStateException e) {
+        logger.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception :" + e.getMessage());
     }
-
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> usernameNotFoundExceptionHandler(final UsernameNotFoundException e) {
-        logger.info(e.getMessage());
+        logger.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username Not Found with the JWT token. Check the Database" + e.getMessage());
     }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     public ResponseEntity<String> authenticationCredentialsNotFoundExceptionHandler(final AuthenticationCredentialsNotFoundException e) {
-        logger.info(e.getMessage());
+        logger.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Credential Not Found : " + e.getMessage());
     }
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<String> usernameAlreadyExistsExceptionHandler(final UsernameAlreadyExistsException e) {
-        logger.info(e.getMessage());
+        logger.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Username Already Exists" + e.getMessage());
     }
 }

@@ -5,13 +5,12 @@ import io.moun.api.member.controller.mapper.MemberMapper;
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.domain.repository.MemberRepository;
 import io.moun.api.member.service.MemberQueryService;
-import io.moun.api.security.controller.dto.CheckRequest;
 import io.moun.api.security.controller.dto.LoginRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.security.controller.dto.LoginResponse;
 import io.moun.api.security.domain.Auth;
+import io.moun.api.security.domain.Role;
 import io.moun.api.security.domain.repository.AuthRepository;
-import io.moun.api.security.domain.repository.RoleRepository;
 import io.moun.api.security.domain.vo.JwtToken;
 import io.moun.api.security.exception.UsernameAlreadyExistsException;
 import io.moun.api.security.service.AuthService;
@@ -19,7 +18,6 @@ import io.moun.api.security.service.IJwtTokenHelper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,12 +32,8 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final IJwtTokenHelper jwtTokenHelper;
-    private final ModelMapper modelMapper;
-    private final MemberQueryService memberQueryService;
-    private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
 
@@ -52,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
         Auth auth = new Auth();
         auth.setUsername(registerRequest.getUsername());
         auth.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        auth.addRole("ROLE_USER");
+        auth.setRole(Role.USER);
         auth.setMember(member);
         authRepository.save(auth);
     }
@@ -82,21 +76,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void check(CheckRequest checkRequest) {
-        boolean isValid = jwtTokenHelper.isValidToken(checkRequest.getJwtToken());
+    public void check() {
+        boolean isValid = jwtTokenHelper.isValidToken();
         if (!isValid) {
             throw new AuthenticationCredentialsNotFoundException("Invalid token");
         }
 
-    }
-
-    @Override
-    public Auth findAuthByUsername(String username) {
-        Auth auth = authRepository.findByUsername(username).orElse(null);
-        if (auth == null) {
-            throw new AuthenticationCredentialsNotFoundException(username + "Not Found");
-        }
-        return auth;
     }
 }
 
