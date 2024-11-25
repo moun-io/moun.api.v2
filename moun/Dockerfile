@@ -10,5 +10,5 @@ EXPOSE 8080
 ENV PROFILE="test"
 
 # 4. Spring Boot 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "app.jar","--spring.profiles.active=$PROFILE"]
+ENTRYPOINT ["java", "-jar", "app.jar","--spring.profiles.active=test"]
 
