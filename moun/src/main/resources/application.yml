@@ -1,9 +1,10 @@
-#local profile
 server:
   address : 0.0.0.0
   port : 8080
   servlet:
     context-path: /api
+---
+#local profile
 spring:
   config:
     activate:
