@@ -1,10 +1,10 @@
 package io.moun.api.song.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.moun.api.auction.controller.dto.AuctionRequest;
 import io.moun.api.auction.domain.Auction;
 import io.moun.api.auction.domain.AuctionRepository;
 import io.moun.api.common.domain.MounFile;
+import io.moun.api.common.domain.SortType;
 import io.moun.api.common.service.MounFileService;
 import io.moun.api.member.domain.Member;
 import io.moun.api.member.service.MemberQueryService;
@@ -12,9 +12,12 @@ import io.moun.api.security.infrastructure.JwtTokenHelper;
 import io.moun.api.song.controller.dto.SongAuctionVO;
 import io.moun.api.song.controller.dto.SongRequest;
 import io.moun.api.song.controller.dto.SongResponse;
+import io.moun.api.song.domain.GenreType;
 import io.moun.api.song.domain.Song;
 import io.moun.api.song.domain.SongRepository;
+import io.moun.api.song.domain.VibeType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,8 +29,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,7 +46,6 @@ public class SongService {
     private final MemberQueryService memberQueryService;
     private final MounFileService mounFileService;
     private final JwtTokenHelper jwtTokenHelper;
-    private final ObjectMapper objectMapper;
 
     //music upload - file / api1
     @Transactional
@@ -49,7 +56,7 @@ public class SongService {
 
         Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
 
-        song.update(songUpload, coverUpload);
+        song.addFile(songUpload, coverUpload);
 
         SongResponse build = SongResponse.builder()
                 .id(song.getId())
@@ -79,6 +86,30 @@ public class SongService {
         auctionRequest.setExpired(false);
         SongRequest songRequest = songAuctionVO.getSongRequest();
 
+        Set<String> songGenres = songRequest.getSongGenres();
+        Set<String> songVibes = songRequest.getSongVibes();
+
+        Set<GenreType> realGenres = new HashSet<>();
+        Set<VibeType> realVibes = new HashSet<>();
+        for (String songGenre : songGenres) {
+            GenreType genreType = GenreType.valueOf(songGenre.toUpperCase());
+
+            if (!songGenre.equalsIgnoreCase(genreType.toString())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            realGenres.add(genreType);
+        }
+        for (String songVibe: songVibes) {
+            VibeType vibeType = VibeType.valueOf(songVibe.toUpperCase());
+
+            if (!songVibe.equalsIgnoreCase(vibeType.toString())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            realVibes.add(vibeType);
+        }
+
         //if start date is later than end date, also start bid is smaller than winning bid, return 400 / null
         if (Duration.between(auctionRequest.getStartDate().atStartOfDay(), auctionRequest.getEndDate().atStartOfDay()).toDays() <= 0
                 || auctionRequest.getStartBid() - auctionRequest.getWinningBid() > 0) {
@@ -98,8 +129,8 @@ public class SongService {
                 .auction(buildAuction)
                 .title(songRequest.getTitle())
                 .description(songRequest.getDescription())
-                .songGenres(songRequest.getSongGenres())
-                .songVibes(songRequest.getSongVibes())
+                .songGenres(realGenres)
+                .songVibes(realVibes)
                 .build();
 
         auctionRepository.save(buildAuction);
@@ -130,7 +161,56 @@ public class SongService {
         return ResponseEntity.status(HttpStatus.OK).body(songResponseList);
     }
 
-    //get audio multifile
+    //find all songs by genre & vibe / api
+    public ResponseEntity<List<SongResponse>> findSongsByGenreAndVibe(String genreType, String vibeType) {
+        if (!genreType.isBlank() || !vibeType.isBlank()) {
+
+            if (Arrays.stream(GenreType.values()).anyMatch(g -> g.name().equalsIgnoreCase(genreType)) &&
+                    Arrays.stream(VibeType.values()).anyMatch(v -> v.name().equalsIgnoreCase(vibeType))) {
+
+                GenreType gt = GenreType.valueOf(genreType.toUpperCase());
+                VibeType vt = VibeType.valueOf(vibeType.toUpperCase());
+
+                List<Song> songs = songRepository.findSongsBySongGenresAndSongVibes(gt, vt);
+
+                List<SongResponse> songResponses = getSongResponses(songs);
+
+                return ResponseEntity.status(HttpStatus.OK).body(songResponses);
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    //find all songs by sort type / api
+    public ResponseEntity<List<SongResponse>> findSongsBySortType(String sortType) {
+
+        if (!sortType.isBlank()) {
+            //later, add sort conditions here...
+            if (Arrays.stream(SortType.values()).noneMatch(s -> s.name().equalsIgnoreCase(sortType))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            List<Auction> auctions = auctionRepository.findAuctionsByOrderByEndDateAsc();
+
+            List<SongResponse> responses = new ArrayList<>();
+            for (Auction auction : auctions) {
+                Song song = songRepository.findById(auction.getId()).orElseThrow(() -> new RuntimeException("Song id by Auction not found"));
+
+                SongResponse build = SongResponse.create(song);
+
+                responses.add(build);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(responses);
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    //download audio multifile / api
     public ResponseEntity<byte[]> downloadSongFileBySongId(Long id) throws IOException {
 
         Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
@@ -148,7 +228,7 @@ public class SongService {
                 .body(bytes);
     }
 
-    //get image multifile
+    //download image multifile / api
     public ResponseEntity<byte[]> downloadImageFileBySongId(Long id) throws IOException {
 
         Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found"));
@@ -166,31 +246,72 @@ public class SongService {
                 .body(bytes);
     }
 
+    //update song, auction entity / api
+    @Transactional
+    public ResponseEntity<String> updateSong(Long id, SongRequest updateRequest) {
+        Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Song id not found"));
+
+        //genre & vibe
+        Set<String> updateGenres = updateRequest.getSongGenres();
+        Set<GenreType> originGenres = song.getSongGenres();
+
+        if (!updateGenres.isEmpty()) {
+            originGenres = updateGenres.stream()
+                    .map(s -> GenreType.valueOf(s.toUpperCase()))
+                    .collect(Collectors.toSet());
+        }
+
+        Set<String> updateVibes = updateRequest.getSongVibes();
+        Set<VibeType> originVibes = song.getSongVibes();
+
+        if (!updateVibes.isEmpty()) {
+            originVibes = updateVibes.stream()
+                    .map(s ->  VibeType.valueOf(s.toUpperCase()))
+                    .collect(Collectors.toSet());
+        }
+
+        //title
+        String title = updateRequest.getTitle();
+        if (title.isBlank()) {
+            title = song.getTitle();
+        }
+
+        //description
+        String description = updateRequest.getDescription();
+        if (description.isBlank()) {
+            description = song.getDescription();
+        }
+
+        song.update(title, description, originGenres, originVibes);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Successful");
+    }
+
+    //delete song by id / api
+    @Transactional
+    public ResponseEntity<String> deleteSongsById(Long id) {
+        Song song = songRepository.findById(id).orElseThrow(() -> new RuntimeException("Song id not found"));
+
+
+        mounFileService.deleteById(song.getSongFile().getId());
+        mounFileService.deleteById(song.getCoverImageFile().getId());
+        auctionRepository.deleteById(id);
+        songRepository.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Delete successful");
+    }
 
 
     //get songs list / method
     private List<SongResponse> getSongResponses(List<Song> songList) {
 
-        String getURL = "GET /api/songs/{id}/";
         List<SongResponse> responses = new ArrayList<>();
 
         for (Song song : songList) {
             String songName = song.getSongFile().getFileName();
             String coverName = song.getCoverImageFile().getFileName();
 
-            SongResponse build = SongResponse.builder()
-                    .id(song.getId())
-                    .title(song.getTitle())
-                    .description(song.getDescription())
-                    .songGenres(song.getSongGenres())
-                    .songVibes(song.getSongVibes())
-                    .songFileURL(getURL + "audio")
-                    .coverFileURL(getURL + "image")
-                    .createdDate(song.getCreatedDate())
-                    .lastModifiedDate(song.getLastModifiedDate())
-                    .memberId(song.getMember().getId())
-                    .auction(song.getAuction())
-                    .build();
+            SongResponse build = SongResponse.create(song);
 
             responses.add(build);
         }

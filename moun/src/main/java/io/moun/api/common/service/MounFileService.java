@@ -81,5 +81,8 @@ public class MounFileService {
         return mounFileRepository.findMounFileByGeneratedFileName(fileName).orElseThrow(
                 () -> new RuntimeException("Id not founded"));
     }
-    
+
+    public void deleteById(Long fileId) {
+        mounFileRepository.deleteById(fileId);
+    }
 }

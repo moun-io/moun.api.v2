@@ -2,7 +2,9 @@ package io.moun.api.song.controller.dto;
 
 import io.moun.api.auction.domain.Auction;
 import io.moun.api.common.BaseEntityResponse;
+import io.moun.api.common.domain.StaticVariables;
 import io.moun.api.song.domain.GenreType;
+import io.moun.api.song.domain.Song;
 import io.moun.api.song.domain.VibeType;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,5 +47,19 @@ public class SongResponse extends BaseEntityResponse {
         this.auction = auction;
     }
 
-
+    public static SongResponse create(Song song) {
+         return SongResponse.builder()
+                .id(song.getId())
+                .title(song.getTitle())
+                .description(song.getDescription())
+                .songGenres(song.getSongGenres())
+                .songVibes(song.getSongVibes())
+                .songFileURL(StaticVariables.getURL + "audio")
+                .coverFileURL(StaticVariables.getURL + "image")
+                .createdDate(song.getCreatedDate())
+                .lastModifiedDate(song.getLastModifiedDate())
+                .memberId(song.getMember().getId())
+                .auction(song.getAuction())
+                .build();
+    }
 }

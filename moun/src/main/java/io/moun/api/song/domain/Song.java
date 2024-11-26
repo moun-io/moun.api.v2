@@ -78,8 +78,15 @@ public class Song extends BaseEntity {
         this.auction = auction;
     }
 
-    public void update(MounFile songFile, MounFile coverImageFile) {
+    public void addFile(MounFile songFile, MounFile coverImageFile) {
         this.songFile = songFile;
         this.coverImageFile = coverImageFile;
+    }
+
+    public void update(String title, String description, Set<GenreType> genreTypes, Set<VibeType> vibeTypes) {
+        this.title = title;
+        this.description = description;
+        this.songGenres = genreTypes;
+        this.songVibes = vibeTypes;
     }
 }
