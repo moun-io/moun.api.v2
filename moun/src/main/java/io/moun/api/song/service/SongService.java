@@ -70,8 +70,8 @@ public class SongService {
         Auction buildAuction = Auction.builder()
                 .startDate(auctionRequest.getStartDate())
                 .endDate(auctionRequest.getEndDate())
-                .startBid(auctionRequest.getStartBid())
-                .winningBid(auctionRequest.getWinningBid())
+                .startBidAmount(auctionRequest.getStartBid())
+                .winningBidAmount(auctionRequest.getWinningBid())
                 .isCopyrightTransfer(auctionRequest.isCopyrightTransfer())
                 .isExpired(auctionRequest.isExpired())
                 .build();

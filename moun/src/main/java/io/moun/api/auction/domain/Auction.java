@@ -25,9 +25,9 @@ public class Auction {
     private LocalDate endDate;
     
     @NotNull
-    private int startBid;
+    private int startBidAmount;
     @NotNull
-    private int winningBid;
+    private int winningBidAmount;
     
     @NotNull
     private boolean isCopyrightTransfer;
@@ -35,11 +35,11 @@ public class Auction {
     private boolean isExpired;
 
     @Builder
-    public Auction(LocalDate startDate, LocalDate endDate, int startBid, int winningBid, boolean isCopyrightTransfer, boolean isExpired) {
+    public Auction(LocalDate startDate, LocalDate endDate, int startBidAmount, int winningBidAmount, boolean isCopyrightTransfer, boolean isExpired) {
         this.startDate = startDate;
         this.endDate = endDate;
-        this.startBid = startBid;
-        this.winningBid = winningBid;
+        this.startBidAmount = startBidAmount;
+        this.winningBidAmount = winningBidAmount;
         this.isCopyrightTransfer = isCopyrightTransfer;
         this.isExpired = isExpired;
     }
