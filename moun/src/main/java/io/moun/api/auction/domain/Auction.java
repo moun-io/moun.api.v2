@@ -1,14 +1,18 @@
 package io.moun.api.auction.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,13 +24,17 @@ public class Auction {
     
     //@Temporal(TemporalType.TIMESTAMP) -> 자바 8이후로는 LocalDate / LocalDateTime 사용
     @NotNull
+    @FutureOrPresent
     private LocalDate startDate;
     @NotNull
+    @FutureOrPresent
     private LocalDate endDate;
     
     @NotNull
+    @PositiveOrZero
     private int startBid;
     @NotNull
+    @PositiveOrZero
     private int winningBid;
     
     @NotNull
