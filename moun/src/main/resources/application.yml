@@ -52,13 +52,19 @@ spring:
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   
+
+
   jpa:
+    database: mysql
     hibernate:
-      ddl-auto: create
-    show-sql: true
+      ddl-auto: update #change to none after create once
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
+    open-in-view: false
+    defer-datasource-initialization: false
+
   
   sql:
     init:
