@@ -4,9 +4,11 @@ import io.moun.api.member.controller.dto.MemberResponse;
 import io.moun.api.member.controller.dto.MemberUpdateRequest;
 import io.moun.api.member.controller.dto.RegisterRequest;
 import io.moun.api.member.domain.Member;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 public interface MemberApplicationService {
     MemberResponse register(RegisterRequest registerRequest);
 
