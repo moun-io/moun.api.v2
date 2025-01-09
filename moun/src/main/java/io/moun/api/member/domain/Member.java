@@ -6,10 +6,7 @@ import io.moun.api.security.domain.Auth;
 import io.moun.api.song.domain.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
