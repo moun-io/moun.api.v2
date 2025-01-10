@@ -5,17 +5,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Transactional
 @SpringBootTest
 public class memberRepositoryTests {
 
     @Autowired
     MemberRepository memberRepository;
-
+    List<Member> members = new ArrayList<>();
     Member member1;
     @BeforeEach
     void setUp() {
@@ -24,16 +26,66 @@ public class memberRepositoryTests {
             return new Position(positionType, null);
         }).toList();
         memberRepository.deleteAll();
-        member1 = Member.builder().id(1L).sns(SNS.builder().instagramSNS("instagram1").soundCloudSNS("soundcloud1").build())
+        members.add(
+                Member.builder()
+                .sns(SNS.builder()
+                        .instagramSNS("instagram1").soundCloudSNS("soundcloud1").build())
                 .displayName("username1")
                 .description("description1")
                 .positions(positions.subList(0,1))
                 .verified(false)
                 .profilePictureUrl(null)
-                .build();
+                .build());
+        members.add(
+                Member.builder()
+                        .sns(SNS.builder()
+                                .instagramSNS("instagram2").soundCloudSNS("soundcloud2").build())
+                        .displayName("username2")
+                        .description("description2")
+                        .positions(positions.subList(1,2))
+                        .verified(false)
+                        .profilePictureUrl(null)
+                        .build());
+        members.add(
+                Member.builder()
+                        .sns(SNS.builder()
+                                .instagramSNS("instagram3").soundCloudSNS("soundcloud3").build())
+                        .displayName("username3")
+                        .description("description3")
+                        .positions(positions.subList(1,2))
+                        .verified(false)
+                        .profilePictureUrl(null)
+                        .build());
+
+        members.add(
+                Member.builder()
+                        .sns(SNS.builder()
+                                .instagramSNS("instagram4").soundCloudSNS("soundcloud4").build())
+                        .displayName("username4")
+                        .description("description4")
+                        .positions(positions.subList(1,2))
+                        .verified(false)
+                        .profilePictureUrl(null)
+                        .build());
+
+        members.add(
+                Member.builder()
+                        .sns(SNS.builder()
+                                .instagramSNS("instagram5").soundCloudSNS("soundcloud5").build())
+                        .displayName("username5")
+                        .description("description5")
+                        .positions(positions.subList(1,2))
+                        .verified(false)
+                        .profilePictureUrl(null)
+                        .build());
     }
+
     @Test
     void test(){
-        memberRepository.save(member1);
+        for ( Member member : members ) {
+            memberRepository.save(member);
+        }
+        assert memberRepository.count() == members.size();
+
     }
 }

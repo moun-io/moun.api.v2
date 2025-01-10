@@ -16,6 +16,10 @@
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
     <option name="VM_PARAMETERS" value="-ea -Dspring.profiles.active=test" />
+    <envs>
+      <env name="LOCAL_UPLOAD_DIR" value="$LOCAL_UPLOAD_DIR$" />
+      <env name="MYSQL_PASSWORD" value="$MYSQL_PASSWORD$" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
