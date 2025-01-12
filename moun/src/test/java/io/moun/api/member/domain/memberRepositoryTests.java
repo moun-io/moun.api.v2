@@ -5,17 +5,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
+import javax.xml.transform.Source;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Transactional
 @SpringBootTest
 public class memberRepositoryTests {
-
     @Autowired
+
     MemberRepository memberRepository;
     List<Member> members = new ArrayList<>();
     Member member1;
@@ -80,12 +87,28 @@ public class memberRepositoryTests {
                         .build());
     }
 
+
     @Test
-    void test(){
+    void saveAndFindTest(){
         for ( Member member : members ) {
             memberRepository.save(member);
         }
         assert memberRepository.count() == members.size();
-
+        Iterator<Member> it= members.iterator();
+        while(it.hasNext()){
+            Member member  = it.next();
+            Member memberDB = memberRepository.findById(member.getId()).orElseThrow();
+            assert memberDB.equals(member);
+        }
     }
+    @Test
+    void saveAllandfindALlTest(){
+        memberRepository.saveAll(members);
+        List<Member> membersDB = memberRepository.findAll();
+        assert membersDB.size() == members.size();
+        for (Member member : members) {
+            assert membersDB.contains(member);
+        }
+    }
+
 }

@@ -58,7 +58,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update #change to none after create once
+      ddl-auto: create #change to none after create once
     properties:
 
       hibernate:
