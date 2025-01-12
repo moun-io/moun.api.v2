@@ -4,6 +4,7 @@ import io.moun.api.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -22,16 +23,13 @@ import java.util.List;
 @SpringBootTest
 public class memberRepositoryTests {
     @Autowired
-
+    DefaultListableBeanFactory beanFactory;
+    @Autowired
     MemberRepository memberRepository;
     List<Member> members = new ArrayList<>();
     Member member1;
     @BeforeEach
     void setUp() {
-        PositionType[] positionTypes = PositionType.values();
-        List<Position> positions = Arrays.stream(positionTypes).map((positionType)->{
-            return new Position(positionType, null);
-        }).toList();
         memberRepository.deleteAll();
         members.add(
                 Member.builder()
@@ -39,7 +37,6 @@ public class memberRepositoryTests {
                         .instagramSNS("instagram1").soundCloudSNS("soundcloud1").build())
                 .displayName("username1")
                 .description("description1")
-                .positions(positions.subList(0,1))
                 .verified(false)
                 .profilePictureUrl(null)
                 .build());
@@ -49,7 +46,6 @@ public class memberRepositoryTests {
                                 .instagramSNS("instagram2").soundCloudSNS("soundcloud2").build())
                         .displayName("username2")
                         .description("description2")
-                        .positions(positions.subList(1,2))
                         .verified(false)
                         .profilePictureUrl(null)
                         .build());
@@ -59,7 +55,6 @@ public class memberRepositoryTests {
                                 .instagramSNS("instagram3").soundCloudSNS("soundcloud3").build())
                         .displayName("username3")
                         .description("description3")
-                        .positions(positions.subList(1,2))
                         .verified(false)
                         .profilePictureUrl(null)
                         .build());
@@ -70,7 +65,6 @@ public class memberRepositoryTests {
                                 .instagramSNS("instagram4").soundCloudSNS("soundcloud4").build())
                         .displayName("username4")
                         .description("description4")
-                        .positions(positions.subList(1,2))
                         .verified(false)
                         .profilePictureUrl(null)
                         .build());
@@ -81,13 +75,23 @@ public class memberRepositoryTests {
                                 .instagramSNS("instagram5").soundCloudSNS("soundcloud5").build())
                         .displayName("username5")
                         .description("description5")
-                        .positions(positions.subList(1,2))
                         .verified(false)
                         .profilePictureUrl(null)
                         .build());
+
+//        PositionType[] positionTypes = PositionType.values();
+//        List<Position> positions = Arrays.stream(positionTypes).map((positionType)->{
+//            return new Position(positionType, null);
+//        }).toList();
     }
 
 
+    @Test
+    void beans(){
+        System.out.println("Beans : ");
+        for(String name : beanFactory.getBeanDefinitionNames())
+        System.out.println(name + " : \t" + beanFactory.getBean(name).getClass().getName());
+    }
     @Test
     void saveAndFindTest(){
         for ( Member member : members ) {
@@ -102,7 +106,7 @@ public class memberRepositoryTests {
         }
     }
     @Test
-    void saveAllandfindALlTest(){
+    void saveAllandFindAllTest(){
         memberRepository.saveAll(members);
         List<Member> membersDB = memberRepository.findAll();
         assert membersDB.size() == members.size();
