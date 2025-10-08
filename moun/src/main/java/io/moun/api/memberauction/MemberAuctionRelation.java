@@ -1,10 +1,11 @@
 package io.moun.api.memberauction;
 
-import io.moun.api.common.domain.BaseEntity;
+import io.moun.api.common.BaseEntity;
 import io.moun.api.auction.domain.Auction;
 import io.moun.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,4 +37,12 @@ public class MemberAuctionRelation extends BaseEntity {
 
     private LocalDateTime bidDate;
     private int amount;
+
+    @Builder
+    public MemberAuctionRelation(Member member, Auction auction, LocalDateTime bidDate, int amount) {
+        this.member = member;
+        this.auction = auction;
+        this.bidDate = bidDate;
+        this.amount = amount;
+    }
 }
